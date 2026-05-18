@@ -1,6 +1,9 @@
 import PetCard from "@/Components/App/All-Pate/PetCard";
+import { getPetsData } from "@/lib/Data";
 
-const AllPatePage = () => {
+const AllPatePage = async () => {
+  const pestsData = await getPetsData();
+
   return (
     <section className="relative py-10 overflow-hidden bg-white dark:bg-black transition-all duration-300">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-175 h-175 bg-cyan-500/10 blur-3xl rounded-full"></div>
@@ -115,7 +118,9 @@ const AllPatePage = () => {
       </div>
 
       <div className="container mx-auto px-2 py-10 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <PetCard />
+        {pestsData.map((pets) => (
+          <PetCard key={pets._id} pets={pets} />
+        ))}
       </div>
     </section>
   );
