@@ -3,14 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const NavLink = ({ href, className, children }) => {
+const NavLink = ({ href, children }) => {
   const pathName = usePathname();
   const isActive = href === pathName;
 
   return (
     <Link
       href={href}
-      className={`${isActive ? "border-b-2 border-emerald-600" : ""} ${className}`}
+      className={`${isActive ? "border-b-2 border-emerald-600" : ""}`}
     >
       {children}
     </Link>

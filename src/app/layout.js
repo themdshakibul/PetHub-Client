@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ThemeProveider from "@/Components/NextProveider/ThemeProveider";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,8 +25,14 @@ export default function RootLayout({ children }) {
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-background text-foreground">
-        <ThemeProveider>{children}</ThemeProveider>
+      <body
+        className="min-h-full flex flex-col bg-background text-foreground"
+        wotdisconnected="true"
+      >
+        <ThemeProveider>
+          <main>{children}</main>
+          <Toaster />
+        </ThemeProveider>
       </body>
     </html>
   );

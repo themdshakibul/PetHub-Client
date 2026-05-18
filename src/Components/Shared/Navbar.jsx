@@ -1,14 +1,18 @@
 "use client";
 
-import { useState } from "react";
 import UserAccount from "./UserAccount";
 import NavLink from "./NavLink";
 import Image from "next/image";
 import { Button } from "@heroui/react";
 import ThemeSwitch from "./ThemeSwitch";
+import Link from "next/link";
+import { useState } from "react";
+import { authClient } from "@/lib/auth-client";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { data } = authClient.useSession();
+  const user = data?.user;
 
   return (
     <section className="sticky top-0 z-50 w-full border-b backdrop-blur-xl transition-colors duration-300 border-black/5 bg-white/70 shadow-xs dark:border-white/10 dark:bg-[#0a0f1e]/80 dark:shadow-2xl">
@@ -57,15 +61,25 @@ const Navbar = () => {
               <div className="flex items-center gap-3">
                 <ThemeSwitch />
                 <div className="h-4 w-px bg-black/10 dark:bg-white/20" />
-                <UserAccount />
-              </div>
-              <div className="flex items-center gap-3">
-                <Button variant="light" className="text-[#f472b6] font-bold">
-                  Login
-                </Button>
-                <Button className="bg-linear-to-r from-[#f472b6] via-[#a855f7] to-[#22d3ee] text-white font-black px-6 shadow-lg">
-                  SIGNUP
-                </Button>
+                {user ? (
+                  <UserAccount user={user} />
+                ) : (
+                  <div className="flex items-center gap-3">
+                    <Link href={"/signin"}>
+                      <Button
+                        variant="light"
+                        className="text-[#f472b6] font-bold"
+                      >
+                        Login
+                      </Button>
+                    </Link>
+                    <Link href={"/signup"}>
+                      <Button className="bg-linear-to-r from-[#f472b6] via-[#a855f7] to-[#22d3ee] text-white font-black px-6 shadow-lg">
+                        SIGNUP
+                      </Button>
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
 
