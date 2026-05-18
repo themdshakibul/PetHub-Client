@@ -1,9 +1,7 @@
+import React from "react";
+
 const AddPatePage = () => {
-  return (
-    <div>
-      <h2>AddPatePage</h2>
-    </div>
-  );
+  return <div>add pate</div>;
 };
 
 export default AddPatePage;
