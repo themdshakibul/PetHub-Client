@@ -20,8 +20,13 @@ export const createPate = async (petData) => {
   return data;
 };
 
-// export const MyListingPate = async () => {
-//   const res = await fetch("http://localhost:9000/");
-//   const data = await res.json();
-//   return data;
-// };
+// AdoptFormCard
+export const adoptUserPet = async (fieldData) => {
+  const res = await fetch("http://localhost:9000/adopt", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(fieldData),
+  });
+  const data = await res.json();
+  return data;
+};

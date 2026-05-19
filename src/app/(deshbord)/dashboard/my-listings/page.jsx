@@ -1,8 +1,14 @@
+import MyListingCard from "@/Components/App/MyListing/MyListingCard";
+import MyListingsHeader from "@/Components/App/MyListing/MyListingsHeader";
+
 const MyListingPage = () => {
   return (
-    <div>
-      <h2>My Listing page</h2>
-    </div>
+    <section>
+      <MyListingsHeader />
+      <div className="grid grid-cols-3 gap-5">
+        <MyListingCard />
+      </div>
+    </section>
   );
 };
 

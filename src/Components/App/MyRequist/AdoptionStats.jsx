@@ -23,7 +23,7 @@ const staticData = [
 
 const AdoptionStats = () => {
   return (
-    <section className="w-full overflow-hidden">
+    <section className="w-full overflow-hidden px-5">
       <Table aria-label="Adoption stats table">
         <Table.ScrollContainer>
           <Table.Content aria-label="Adoption stats table" className="w-full">

@@ -1,8 +1,10 @@
 "use client";
 
 import { authClient } from "@/lib/auth-client";
+import { adoptUserPet } from "@/lib/Data";
 import { Card, Button, DateField, Label, DatePicker } from "@heroui/react";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import {
   FaHeart,
   FaUser,
@@ -32,7 +34,7 @@ export const AdoptionFormCard = ({ petInfo }) => {
     species,
   } = petInfo;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const petData = Object.fromEntries(formData.entries());
@@ -55,6 +57,13 @@ export const AdoptionFormCard = ({ petInfo }) => {
       species,
       date: new Date(date),
     };
+    // console.log(fieldData);
+
+    const adopt = await adoptUserPet(fieldData);
+
+    if (adopt) {
+      toast.success("Adopt Successfull!");
+    }
   };
 
   return (
