@@ -2,13 +2,13 @@
 
 import { FiFileText } from "react-icons/fi";
 
-const AdoptionRequestsHeader = ({ requests = [] }) => {
-  const total = requests?.length || 0;
-  const pending = requests?.filter((r) => r.status === "pending")?.length || 0;
+const AdoptionRequestsHeader = ({ adoptUser }) => {
+  const total = adoptUser?.length || 0;
+  const pending = adoptUser?.filter((r) => r.status === "pending")?.length || 0;
   const approved =
-    requests?.filter((r) => r.status === "approved")?.length || 0;
+    adoptUser?.filter((r) => r.status === "approved")?.length || 0;
   const rejected =
-    requests?.filter((r) => r.status === "rejected")?.length || 0;
+    adoptUser?.filter((r) => r.status === "rejected")?.length || 0;
 
   const stats = [
     {

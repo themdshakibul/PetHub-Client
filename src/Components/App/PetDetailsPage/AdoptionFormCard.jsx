@@ -2,9 +2,10 @@
 
 import { authClient } from "@/lib/auth-client";
 import { adoptUserPet } from "@/lib/Data";
-import { Card, Button, DateField, Label, DatePicker } from "@heroui/react";
+import { Card, Button, DateField } from "@heroui/react";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import SuccessAdoptedCard from "./SuccessAdoptedCard";
 import {
   FaHeart,
   FaUser,
@@ -15,6 +16,7 @@ import {
 
 export const AdoptionFormCard = ({ petInfo }) => {
   const [date, setDate] = useState(null);
+  const [isAdopted, setIsAdopted] = useState(false);
 
   const { data } = authClient.useSession();
   const user = data?.user;
@@ -39,6 +41,11 @@ export const AdoptionFormCard = ({ petInfo }) => {
     const formData = new FormData(e.currentTarget);
     const petData = Object.fromEntries(formData.entries());
 
+    if (!date) {
+      toast.error("Please select a pickup date!");
+      return;
+    }
+
     const fieldData = {
       userId: user.id,
       usrName: user.name,
@@ -57,14 +64,22 @@ export const AdoptionFormCard = ({ petInfo }) => {
       species,
       date: new Date(date),
     };
-    // console.log(fieldData);
 
     const adopt = await adoptUserPet(fieldData);
 
     if (adopt) {
-      toast.success("Adopt Successfull!");
+      toast.success("Adopt Successful!");
+      setIsAdopted(true);
     }
   };
+
+  if (isAdopted) {
+    return (
+      <div className="w-full max-w-lg mx-auto p-4 sm:p-0">
+        <SuccessAdoptedCard petName={petName} />
+      </div>
+    );
+  }
 
   return (
     <div className="relative w-full max-w-lg mx-auto p-4 sm:p-0">
@@ -84,6 +99,7 @@ export const AdoptionFormCard = ({ petInfo }) => {
             hours.
           </p>
         </div>
+
         {/* Form Body */}
         <form
           onSubmit={handleSubmit}
@@ -114,7 +130,7 @@ export const AdoptionFormCard = ({ petInfo }) => {
               />
               <input
                 readOnly
-                value={user?.name}
+                value={user?.name || ""}
                 name="yourName"
                 className="w-full bg-white dark:bg-white/5 border border-slate-300 dark:border-white/10 hover:border-rose-400 focus:border-rose-500 h-12 pl-11 pr-4 rounded-2xl text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none transition-all cursor-not-allowed"
               />
@@ -133,7 +149,7 @@ export const AdoptionFormCard = ({ petInfo }) => {
               />
               <input
                 readOnly
-                value={user?.email}
+                value={user?.email || ""}
                 name="email"
                 className="w-full bg-white dark:bg-white/5 border border-slate-300 dark:border-white/10 hover:border-rose-400 focus:border-rose-500 h-12 pl-11 pr-4 rounded-2xl text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none transition-all cursor-not-allowed"
               />
@@ -171,9 +187,10 @@ export const AdoptionFormCard = ({ petInfo }) => {
                 size={14}
               />
               <textarea
+                required
                 rows={3}
                 name="text"
-                placeholder="Tell the owner why you'd be a great match for Dj Dog..."
+                placeholder={`Tell the owner why you'd be a great match for ${petName}...`}
                 className="w-full bg-white dark:bg-white/5 border border-slate-300 dark:border-white/10 hover:border-rose-400 focus:border-rose-500 rounded-2xl pl-11 pr-4 py-3.5 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none resize-y min-h-23"
               />
             </div>

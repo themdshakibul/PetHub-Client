@@ -4,24 +4,7 @@ import { Button, Table } from "@heroui/react";
 import Cansel from "./Cansel";
 import Link from "next/link";
 
-const staticData = [
-  {
-    id: 1,
-    petName: "Buddy",
-    requestDate: "2024-01-15",
-    pickupDate: "2024-01-20",
-    status: "approved",
-  },
-  {
-    id: 2,
-    petName: "Luna",
-    requestDate: "2024-02-10",
-    pickupDate: "2024-02-15",
-    status: "pending",
-  },
-];
-
-const AdoptionStats = () => {
+const AdoptionStats = ({ adoptUser }) => {
   return (
     <section className="w-full overflow-hidden px-5">
       <Table aria-label="Adoption stats table">
@@ -37,11 +20,17 @@ const AdoptionStats = () => {
               </Table.Column>
             </Table.Header>
             <Table.Body>
-              {staticData.map((item) => (
-                <Table.Row key={item.id}>
-                  <Table.Cell>{item.petName}</Table.Cell>
-                  <Table.Cell>{item.requestDate}</Table.Cell>
+              {adoptUser.map((item) => (
+                <Table.Row key={item._id}>
+                  <Table.Cell>{item.name}</Table.Cell>
                   <Table.Cell>{item.pickupDate}</Table.Cell>
+                  <Table.Cell>
+                    {new Date(item.date).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </Table.Cell>
                   <Table.Cell>
                     <span
                       className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full ${

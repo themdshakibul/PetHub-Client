@@ -21,6 +21,12 @@ export const createPate = async (petData) => {
 };
 
 // AdoptFormCard
+export const getAdoptUserPet = async (user) => {
+  const res = await fetch(`http://localhost:9000/adopt/${user?.id}`);
+  const data = await res.json();
+  return data;
+};
+
 export const adoptUserPet = async (fieldData) => {
   const res = await fetch("http://localhost:9000/adopt", {
     method: "POST",
