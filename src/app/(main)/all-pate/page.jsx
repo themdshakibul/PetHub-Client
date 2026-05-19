@@ -118,8 +118,8 @@ const AllPatePage = async () => {
       </div>
 
       <div className="container mx-auto px-2 py-10 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {pestsData.map((pets) => (
-          <PetCard key={pets._id} pets={pets} />
+        {pestsData.map((pets,ind) => (
+          <PetCard key={ind} pets={pets} />
         ))}
       </div>
     </section>

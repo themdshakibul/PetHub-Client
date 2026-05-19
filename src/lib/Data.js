@@ -1,3 +1,9 @@
+export const feturedPet = async () => {
+  const res = await fetch(`http://localhost:9000/featurepet`);
+  const data = await res.json();
+  return data;
+};
+
 export const getPetsData = async () => {
   const res = await fetch(`http://localhost:9000/pets`);
   const data = await res.json();

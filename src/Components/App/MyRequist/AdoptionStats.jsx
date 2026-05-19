@@ -5,13 +5,16 @@ import Cansel from "./Cansel";
 import Link from "next/link";
 
 const AdoptionStats = ({ adoptUser }) => {
+  console.log(adoptUser);
   return (
     <section className="w-full overflow-hidden px-5">
       <Table aria-label="Adoption stats table">
         <Table.ScrollContainer>
           <Table.Content aria-label="Adoption stats table" className="w-full">
             <Table.Header>
-              <Table.Column key="petName">Pet Name</Table.Column>
+              <Table.Column key="petName" isRowHeader>
+                Pet Name
+              </Table.Column>
               <Table.Column key="requestDate">Request Date</Table.Column>
               <Table.Column key="pickupDate">Pickup Date</Table.Column>
               <Table.Column key="status">Status</Table.Column>
@@ -55,13 +58,15 @@ const AdoptionStats = ({ adoptUser }) => {
                   </Table.Cell>
                   <Table.Cell className="text-right">
                     <div className="flex gap-2 items-center justify-end">
-                      <Button
-                        size="sm"
-                        variant="bordered"
-                        className="text-slate-600 dark:text-slate-300 border-slate-300 dark:border-white/10 hover:border-rose-400 hover:text-rose-500 transition-all"
-                      >
-                        View
-                      </Button>
+                      <Link href={`/all-pate/${item.petId}`}>
+                        <Button
+                          size="sm"
+                          variant="bordered"
+                          className="text-slate-600 dark:text-slate-300 border-slate-300 dark:border-white/10 hover:border-rose-400 hover:text-rose-500 transition-all"
+                        >
+                          View
+                        </Button>
+                      </Link>
 
                       {/* cansel button */}
                       <Cansel adoptId={item._id} />

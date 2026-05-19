@@ -3,21 +3,55 @@
 import { authClient } from "@/lib/auth-client";
 import { createPate } from "@/lib/Data";
 import { PawPrint } from "lucide-react";
+import { useRouter } from "next/navigation"; // 💡 redirect এর বদলে useRouter ইম্পোর্ট করুন
 import toast from "react-hot-toast";
 
 export default function AddPetForm() {
   const { data } = authClient.useSession();
   const user = data?.user;
+  const router = useRouter(); // 💡 রাউটার ইনিশিয়ালাইজ করুন
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const petData = Object.fromEntries(formData.entries());
 
-    const addPate = await createPate(petData);
+    const payload = {
+      petName: petData.petName,
+      petImageUrl: petData.imageUrl,
+      category: petData.species,
+      species: petData.species,
+      breed: petData.breed || "Unknown",
+      age: petData.age ? `${petData.age} years` : "Unknown",
+      gender: petData.gender || "Not Specified",
+      vaccinationStatus: petData.vaccinationStatus || "Not Specified",
+      healthStatus: petData.healthStatus,
+      location: petData.location,
+      adoptionFee: Number(petData.adoptionFee) || 0,
+      ownerEmail: user?.email || "",
+      description: petData.description,
+      status: "available", // 💡 আপনার আগের লিস্টিং পেজের ফিল্টারের সাথে মিল রেখে ছোট হাতের 'available' দেওয়া হলো
+      requests: 0,
+    };
 
-    if (addPate) {
-      toast(`${user?.name} Add Successfull`);
+    if (!user?.email) {
+      toast.error("Please login first to add a pet!");
+      return;
+    }
+
+    try {
+      const addPate = await createPate(payload);
+
+      if (addPate) {
+        toast.success(`${petData.petName} Added Successfully!`);
+        // 💡 try-catch এর ভেতর নিরাপদে রিডাইরেক্ট করার জন্য push ব্যবহার করা হলো
+        router.push("/dashboard/my-listings");
+      } else {
+        toast.error("Failed to add pet. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error adding pet:", error);
+      toast.error("An error occurred. Please try again.");
     }
   };
 
@@ -202,8 +236,9 @@ export default function AddPetForm() {
             </label>
             <input
               name="ownerEmail"
-              value={user?.email}
-              className="w-full bg-white dark:bg-[#1f2937] border border-slate-300 dark:border-white/20 rounded-2xl px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 cursor-not-allowed"
+              value={user?.email || ""}
+              disabled
+              className="w-full bg-slate-100 dark:bg-[#1f2937]/50 border border-slate-300 dark:border-white/20 rounded-2xl px-4 py-3 text-slate-500 dark:text-gray-400 cursor-not-allowed"
             />
           </div>
 

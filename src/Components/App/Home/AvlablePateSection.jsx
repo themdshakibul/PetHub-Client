@@ -1,7 +1,10 @@
 import { Chip } from "@heroui/react";
 import PetCard from "../All-Pate/PetCard";
+import { feturedPet } from "@/lib/Data";
 
-const AvlablePateSection = () => {
+const AvlablePateSection = async () => {
+  const feturedpets = await feturedPet();
+
   return (
     <section className="relative overflow-hidden bg-gray-50 px-4 py-20 transition-colors duration-300 dark:bg-[#0b0b0b]">
       <div className="absolute -left-25 -top-25 h-72 w-72 rounded-full bg-pink-500/10 blur-3xl dark:bg-pink-500/20"></div>
@@ -33,7 +36,9 @@ const AvlablePateSection = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* <PetCard /> */}
+          {feturedpets.map((pets, ind) => (
+            <PetCard key={ind} pets={pets} />
+          ))}
         </div>
       </div>
     </section>

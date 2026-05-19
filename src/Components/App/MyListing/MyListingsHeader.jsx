@@ -4,19 +4,22 @@ import { FiList, FiPlus } from "react-icons/fi";
 import { Button } from "@heroui/react";
 import { useRouter } from "next/navigation";
 
-const staticListings = [
-  { id: 1, status: "available" },
-  { id: 2, status: "available" },
-  { id: 3, status: "available" },
-];
-
-const MyListingsHeader = ({ listings = staticListings }) => {
+const MyListingsHeader = ({ listings = [] }) => {
   const router = useRouter();
 
   const total = listings?.length || 0;
+
   const available =
-    listings?.filter((l) => l.status === "available")?.length || 0;
-  const adopted = listings?.filter((l) => l.status === "adopted")?.length || 0;
+    listings?.filter((pet) => {
+      const status = pet?.status?.toLowerCase()?.trim();
+      return status === "available" || status === "avlabe";
+    })?.length || 0;
+
+  const adopted =
+    listings?.filter((pet) => {
+      const status = pet?.status?.toLowerCase()?.trim();
+      return status === "adopted";
+    })?.length || 0;
 
   const stats = [
     {

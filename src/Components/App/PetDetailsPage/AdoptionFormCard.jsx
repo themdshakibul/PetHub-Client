@@ -48,6 +48,8 @@ export const AdoptionFormCard = ({ petInfo }) => {
 
     const fieldData = {
       userId: user.id,
+      petId: _id,
+      
       usrName: user.name,
       ...petData,
       _id,
