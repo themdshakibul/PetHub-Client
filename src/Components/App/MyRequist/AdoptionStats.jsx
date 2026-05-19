@@ -63,7 +63,8 @@ const AdoptionStats = ({ adoptUser }) => {
                         View
                       </Button>
 
-                      <Cansel />
+                      {/* cansel button */}
+                      <Cansel adoptId={item._id} />
                     </div>
                   </Table.Cell>
                 </Table.Row>

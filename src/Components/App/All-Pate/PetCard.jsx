@@ -101,22 +101,24 @@ const PetCard = ({ pets }) => {
             Details
           </Link>
 
-          <Button
-            fullWidth
-            disabled={status === "Adopted"}
-            startContent={
-              status !== "Adopted" && (
-                <HiOutlineLightningBolt className="animate-pulse" />
-              )
-            }
-            className={`font-black shadow-lg hover:-translate-y-1 transition-all py-6 rounded-xl ${
-              status === "Adopted"
-                ? "bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed"
-                : "bg-linear-to-br from-[#FF8B94] via-[#ff4d6d] to-[#7CCAD5] text-white"
-            }`}
-          >
-            {status === "Adopted" ? "Adopted" : "Adopt Now"}
-          </Button>
+          <Link href={`/all-pate/${_id}`}>
+            <Button
+              fullWidth
+              disabled={status === "Adopted"}
+              startContent={
+                status !== "Adopted" && (
+                  <HiOutlineLightningBolt className="animate-pulse" />
+                )
+              }
+              className={`font-black shadow-lg hover:-translate-y-1 transition-all py-6 rounded-xl ${
+                status === "Adopted"
+                  ? "bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed"
+                  : "bg-linear-to-br from-[#FF8B94] via-[#ff4d6d] to-[#7CCAD5] text-white"
+              }`}
+            >
+              {status === "Adopted" ? "Adopted" : "Adopt Now"}
+            </Button>
+          </Link>
         </CardFooter>
       </Card>
     </>

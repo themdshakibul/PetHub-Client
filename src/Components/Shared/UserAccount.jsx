@@ -44,7 +44,7 @@ const UserAccount = ({ user }) => {
           </div>
           <Dropdown.Menu>
             <Dropdown.Item id="dashboard" textValue="Dashboard">
-              <Link href={"/dashboard/my-requiest"}>
+              <Link href={"/dashboard/my-requiest"} className="w-full">
                 <Label>Dashboard</Label>
               </Link>
             </Dropdown.Item>

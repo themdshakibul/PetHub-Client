@@ -1,9 +1,20 @@
 "use client";
 
+import { adoptCansel } from "@/lib/Data";
 import { TriangleExclamation } from "@gravity-ui/icons";
 import { AlertDialog, Button } from "@heroui/react";
+import { Candal } from "next/font/google";
+import toast from "react-hot-toast";
 
-const Cansel = () => {
+const Cansel = ({ adoptId }) => {
+  const handelCansel = async () => {
+    const canselData = await adoptCansel(adoptId);
+    if (canselData) {
+      toast.success("Cansel Successfull!");
+      window.location.reload();
+    }
+  };
+
   return (
     <AlertDialog>
       <Button
@@ -24,24 +35,25 @@ const Cansel = () => {
               <AlertDialog.Icon status="danger">
                 <TriangleExclamation className="size-5" />
               </AlertDialog.Icon>
-              <AlertDialog.Heading>
-                Permanently delete your account?
-              </AlertDialog.Heading>
+              <AlertDialog.Heading>Permanently delete?</AlertDialog.Heading>
             </AlertDialog.Header>
             <AlertDialog.Body>
               <p>
-                This action cannot be undone. All your data, settings, and
-                content will be permanently removed from our servers. The
-                dramatic red backdrop emphasizes the severity and
-                irreversibility of this decision.
+                This will permanently delete <strong>{}</strong> and all of its
+                data. This action cannot be undone.
               </p>
             </AlertDialog.Body>
             <AlertDialog.Footer className="flex-col-reverse">
               <Button className="w-full" slot="close">
-                Keep Account
+                Keep
               </Button>
-              <Button className="w-full" slot="close" variant="danger">
-                Delete Forever
+              <Button
+                onClick={handelCansel}
+                className="w-full"
+                slot="close"
+                variant="danger"
+              >
+                Cansel
               </Button>
             </AlertDialog.Footer>
           </AlertDialog.Dialog>

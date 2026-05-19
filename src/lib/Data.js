@@ -36,3 +36,12 @@ export const adoptUserPet = async (fieldData) => {
   const data = await res.json();
   return data;
 };
+
+export const adoptCansel = async (adoptId) => {
+  const res = await fetch(`http://localhost:9000/adopt/${adoptId}`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+  });
+  const data = await res.json();
+  return data;
+};

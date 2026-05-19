@@ -2,7 +2,7 @@
 
 import ThemeSwitch from "@/Components/Shared/ThemeSwitch";
 import { authClient } from "@/lib/auth-client";
-import { Avatar } from "@heroui/react";
+import { Avatar, Button } from "@heroui/react";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect, usePathname } from "next/navigation";
