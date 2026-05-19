@@ -1,12 +1,24 @@
 "use client";
 
 import ThemeSwitch from "@/Components/Shared/ThemeSwitch";
+import { authClient } from "@/lib/auth-client";
+import { Avatar } from "@heroui/react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
+import toast from "react-hot-toast";
 
 const DashboardLayout = ({ children }) => {
+  const { data } = authClient.useSession();
+  const user = data?.user;
+
   const pathname = usePathname();
+
+  const hendelLogout = async () => {
+    await authClient.signOut();
+    toast.success(`${user?.name} Log Out Successful`);
+    redirect("/");
+  };
 
   return (
     <section className="flex min-h-screen bg-slate-50 dark:bg-[#020617] text-slate-900 dark:text-slate-100 transition-colors duration-300">
@@ -55,7 +67,10 @@ const DashboardLayout = ({ children }) => {
         </nav>
 
         <div className="p-4 border-t border-slate-200 dark:border-white/5 mt-auto">
-          <button className="flex items-center gap-3 px-4 py-3 text-rose-500 hover:bg-rose-500/10 w-full rounded-xl transition-all">
+          <button
+            onClick={hendelLogout}
+            className="flex items-center gap-3 px-4 py-3 text-rose-500 hover:bg-rose-500/10 w-full rounded-xl transition-all"
+          >
             ↩︎ Logout
           </button>
         </div>
@@ -67,12 +82,13 @@ const DashboardLayout = ({ children }) => {
           <ThemeSwitch />
           <div className="flex items-center gap-3 pl-4 border-l border-slate-200 dark:border-white/10">
             <div className="text-right">
-              <p className="text-sm font-bold">Kiona</p>
-              <p className="text-[10px] text-slate-500">bugy@mailinator.com</p>
+              <p className="text-md font-bold">{user?.name}</p>
+              <p className="text-sm text-slate-500">{user?.email}</p>
             </div>
-            <div className="h-10 w-10 rounded-full bg-linear-to-tr from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold border-2 border-white dark:border-slate-800">
-              KH
-            </div>
+            <Avatar size="md">
+              <Avatar.Image alt="Medium Avatar" src={user?.image} />
+              <Avatar.Fallback>{user?.name?.charAt(0)}</Avatar.Fallback>
+            </Avatar>
           </div>
         </header>
 

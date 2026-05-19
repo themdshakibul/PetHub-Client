@@ -94,13 +94,11 @@ const PetCard = ({ pets }) => {
 
         {/* Footer Buttons */}
         <CardFooter className="px-6 pb-8 pt-2 gap-3">
-          <Link href={`/all-pate/${_id}`}>
-            <Button
-              fullWidth
-              className="bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-white font-bold border border-slate-200 dark:border-white/10 hover:bg-slate-200 dark:hover:bg-white/10 transition-all py-6 rounded-xl"
-            >
-              Details
-            </Button>
+          <Link
+            href={`/all-pate/${_id}`}
+            className="w-full bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-white font-bold border border-slate-200 dark:border-white/10 hover:bg-slate-200 dark:hover:bg-white/10 transition-all py-3 rounded-xl text-center flex items-center justify-center dashboard-btn"
+          >
+            Details
           </Link>
 
           <Button

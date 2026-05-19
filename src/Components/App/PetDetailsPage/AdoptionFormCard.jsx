@@ -1,6 +1,8 @@
 "use client";
 
-import { Card, Button } from "@heroui/react";
+import { authClient } from "@/lib/auth-client";
+import { Card, Button, DateField, Label, DatePicker } from "@heroui/react";
+import { useState } from "react";
 import {
   FaHeart,
   FaUser,
@@ -9,12 +11,50 @@ import {
   FaCommentDots,
 } from "react-icons/fa";
 
-export const AdoptionFormCard = ({ petName }) => {
+export const AdoptionFormCard = ({ petInfo }) => {
+  const [date, setDate] = useState(null);
+
+  const { data } = authClient.useSession();
+  const user = data?.user;
+
+  const {
+    _id,
+    petName,
+    petImageUrl,
+    category,
+    status,
+    healthStatus,
+    description,
+    age,
+    breed,
+    gender,
+    adoptionFee,
+    species,
+  } = petInfo;
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const petData = Object.fromEntries(formData.entries());
-    console.log(petData);
+
+    const fieldData = {
+      userId: user.id,
+      usrName: user.name,
+      ...petData,
+      _id,
+      petName,
+      petImageUrl,
+      category,
+      status,
+      healthStatus,
+      description,
+      age,
+      breed,
+      gender,
+      adoptionFee,
+      species,
+      date: new Date(date),
+    };
   };
 
   return (
@@ -49,7 +89,7 @@ export const AdoptionFormCard = ({ petName }) => {
               readOnly
               name="name"
               value={petName}
-              className="w-full bg-slate-100 dark:bg-white/5 border border-slate-300 dark:border-white/10 rounded-2xl px-4 h-12 text-slate-600 dark:text-slate-400 outline-none cursor-not-allowed"
+              className="w-full bg-white dark:bg-white/5 border border-slate-300 dark:border-white/10 hover:border-rose-400 focus:border-rose-500 h-12 pl-5 pr-4 rounded-2xl text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none transition-all cursor-not-allowed"
             />
           </div>
 
@@ -64,10 +104,10 @@ export const AdoptionFormCard = ({ petName }) => {
                 size={14}
               />
               <input
-                type="text"
+                readOnly
+                value={user?.name}
                 name="yourName"
-                placeholder="Tanisha Zamora"
-                className="w-full bg-white dark:bg-white/5 border border-slate-300 dark:border-white/10 hover:border-rose-400 focus:border-rose-500 h-12 pl-11 pr-4 rounded-2xl text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none transition-all"
+                className="w-full bg-white dark:bg-white/5 border border-slate-300 dark:border-white/10 hover:border-rose-400 focus:border-rose-500 h-12 pl-11 pr-4 rounded-2xl text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none transition-all cursor-not-allowed"
               />
             </div>
           </div>
@@ -83,10 +123,10 @@ export const AdoptionFormCard = ({ petName }) => {
                 size={14}
               />
               <input
-                type="email"
+                readOnly
+                value={user?.email}
                 name="email"
-                placeholder="example@mail.com"
-                className="w-full bg-white dark:bg-white/5 border border-slate-300 dark:border-white/10 hover:border-rose-400 focus:border-rose-500 h-12 pl-11 pr-4 rounded-2xl text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none transition-all"
+                className="w-full bg-white dark:bg-white/5 border border-slate-300 dark:border-white/10 hover:border-rose-400 focus:border-rose-500 h-12 pl-11 pr-4 rounded-2xl text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none transition-all cursor-not-allowed"
               />
             </div>
           </div>
@@ -98,14 +138,16 @@ export const AdoptionFormCard = ({ petName }) => {
             </label>
             <div className="relative">
               <FaCalendar
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-rose-500/70"
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-rose-500/70 z-10"
                 size={14}
               />
-              <input
-                type="date"
-                name="date"
-                className="w-full bg-white dark:bg-white/5 border border-slate-300 dark:border-white/10 hover:border-rose-400 focus:border-rose-500 h-12 pl-11 pr-4 rounded-2xl text-slate-900 dark:text-slate-100 outline-none transition-all"
-              />
+              <DateField onChange={setDate} name="date">
+                <DateField.Group className="w-full bg-white dark:bg-white/5 border border-slate-300 dark:border-white/10 hover:border-rose-400 focus-within:border-rose-500 h-12 pl-7 pr-4 rounded-2xl text-slate-900 dark:text-slate-100 outline-none transition-all flex items-center">
+                  <DateField.Input>
+                    {(segment) => <DateField.Segment segment={segment} />}
+                  </DateField.Input>
+                </DateField.Group>
+              </DateField>
             </div>
           </div>
 

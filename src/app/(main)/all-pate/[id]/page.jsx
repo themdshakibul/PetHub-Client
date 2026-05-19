@@ -20,7 +20,7 @@ const PetDetailsPage = async ({ params }) => {
         {/* Right Side: Dynamic Content (Form or Success) */}
         <div className="lg:col-span-5">
           {status === "Available" ? (
-            <AdoptionFormCard petName={petName} />
+            <AdoptionFormCard petInfo={petInfo} />
           ) : (
             <SuccessAdoptedCard petName={petName} />
           )}

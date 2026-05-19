@@ -9,3 +9,19 @@ export const getPetsDataBYId = async (id) => {
   const data = await res.json();
   return data;
 };
+
+export const createPate = async (petData) => {
+  const res = await fetch("http://localhost:9000/pets", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(petData),
+  });
+  const data = await res.json();
+  return data;
+};
+
+// export const MyListingPate = async () => {
+//   const res = await fetch("http://localhost:9000/");
+//   const data = await res.json();
+//   return data;
+// };

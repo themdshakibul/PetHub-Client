@@ -1,11 +1,14 @@
+import AdoptionRequestsHeader from "@/Components/App/MyRequist/AdoptionRequestsHeader";
+import AdoptionStats from "@/Components/App/MyRequist/AdoptionStats";
 
-
-const MyRequiestPage = () => {
+export default function MyRequistPage() {
   return (
-    <div>
-      <h2>My Requist page</h2>
+    <div className="min-h-screen ">
+      <div className="container mx-auto px-2">
+        {/* Header */}
+        <AdoptionRequestsHeader />
+        <AdoptionStats />
+      </div>
     </div>
   );
-};
-
-export default MyRequiestPage;
+}
