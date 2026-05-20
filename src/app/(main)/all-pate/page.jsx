@@ -1,8 +1,25 @@
 import PetCard from "@/Components/App/All-Pate/PetCard";
 import { getPetsData } from "@/lib/Data";
+import Link from "next/link";
 
-const AllPatePage = async () => {
+const AllPatePage = async ({ searchParams }) => {
+  const resolvedParams = await searchParams;
+  const currentPage = Number(resolvedParams?.page) || 1;
+  const itemsPerPage = 9;
+
   const pestsData = await getPetsData();
+  const totalPets = pestsData.length;
+  const totalPages = Math.ceil(totalPagesCount(totalPets, itemsPerPage));
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentPets = pestsData.slice(startIndex, endIndex);
+
+  const displayTotalPages = totalPages > 0 ? totalPages : 1;
+
+  function totalPagesCount(total, perPage) {
+    return total / perPage;
+  }
 
   return (
     <section className="relative py-10 overflow-hidden bg-white dark:bg-black transition-all duration-300">
@@ -27,12 +44,11 @@ const AllPatePage = async () => {
             </p>
           </div>
 
-          {/* Stats */}
+          {/* Total Available Stats */}
           <div className="bg-black/3 dark:bg-white/5 border border-black/10 dark:border-white/10 backdrop-blur-xl px-5 py-4 rounded-2xl min-w-34">
             <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-              9+
+              {totalPets}+
             </h3>
-
             <p className="text-gray-500 dark:text-gray-400 text-xs mt-1">
               Available Pets
             </p>
@@ -41,20 +57,16 @@ const AllPatePage = async () => {
 
         {/* Filter Card */}
         <div className="relative border border-black/10 dark:border-white/10 bg-black/3 dark:bg-white/5 backdrop-blur-2xl rounded-[32px] p-6 md:p-8 shadow-[0_0_60px_rgba(0,255,255,0.06)]">
-          {/* Decorative Blur */}
           <div className="absolute -top-20 right-0 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl"></div>
 
-          {/* Title */}
           <div className="flex items-center gap-3 mb-8">
             <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-pink-500 to-violet-500 flex items-center justify-center text-white text-xl shadow-lg">
               ⚡
             </div>
-
             <div>
               <h2 className="text-xl font-bold text-gray-900 dark:text-white">
                 Search & Filter
               </h2>
-
               <p className="text-gray-500 dark:text-gray-400 text-xs mt-1">
                 Find pets easily with smart filters.
               </p>
@@ -66,12 +78,10 @@ const AllPatePage = async () => {
               <label className="text-xs font-medium text-gray-600 dark:text-gray-300 mb-2 block">
                 Search by pet name
               </label>
-
               <div className="relative">
                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-base">
                   🔍
                 </div>
-
                 <input
                   type="text"
                   placeholder="Search pets..."
@@ -80,12 +90,10 @@ const AllPatePage = async () => {
               </div>
             </div>
 
-            {/* Species */}
             <div className="lg:col-span-3">
               <label className="text-xs font-medium text-gray-600 dark:text-gray-300 mb-2 block">
                 Pet Species
               </label>
-
               <select className="w-full h-14 rounded-2xl bg-white dark:bg-[#0f172a]/80 border border-black/10 dark:border-white/10 px-4 text-sm text-gray-900 dark:text-white outline-none focus:border-cyan-400 focus:ring-4 focus:ring-cyan-500/10 transition-all">
                 <option>All Species</option>
                 <option>Dogs</option>
@@ -95,12 +103,10 @@ const AllPatePage = async () => {
               </select>
             </div>
 
-            {/* Sort */}
             <div className="lg:col-span-2">
               <label className="text-xs font-medium text-gray-600 dark:text-gray-300 mb-2 block">
                 Sort Fee
               </label>
-
               <select className="w-full h-14 rounded-2xl bg-white dark:bg-[#0f172a]/80 border border-black/10 dark:border-white/10 px-4 text-sm text-gray-900 dark:text-white outline-none focus:border-cyan-400 focus:ring-4 focus:ring-cyan-500/10 transition-all">
                 <option>Default</option>
                 <option>Low → High</option>
@@ -117,11 +123,64 @@ const AllPatePage = async () => {
         </div>
       </div>
 
+      {/* Pet Cards Grid (Max 9 Items) */}
       <div className="container mx-auto px-2 py-10 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {pestsData.map((pets,ind) => (
-          <PetCard key={ind} pets={pets} />
-        ))}
+        {currentPets.length > 0 ? (
+          currentPets.map((pets, ind) => <PetCard key={ind} pets={pets} />)
+        ) : (
+          <div className="col-span-full text-center py-12 text-gray-500">
+            No pets found on this page.
+          </div>
+        )}
       </div>
+
+      {displayTotalPages > 1 && (
+        <div className="container mx-auto px-2 flex justify-center items-center gap-4 mt-6">
+          {/* Previous Button */}
+          <Link
+            href={`?page=${currentPage - 1}`}
+            className={`px-5 py-2.5 rounded-xl border border-black/10 dark:border-white/10 text-sm font-medium transition-all ${
+              currentPage <= 1
+                ? "opacity-40 pointer-events-none bg-gray-100 dark:bg-zinc-900 text-gray-400"
+                : "bg-white dark:bg-zinc-900 text-gray-800 dark:text-gray-200 hover:border-pink-500"
+            }`}
+          >
+            ← Previous
+          </Link>
+
+          {/* Page Indicators */}
+          <div className="flex items-center gap-2 bg-black/5 dark:bg-white/5 px-3 py-1.5 rounded-2xl border border-black/5 dark:border-white/5 backdrop-blur-md">
+            {Array.from({ length: displayTotalPages }, (_, index) => {
+              const pageNumber = index + 1;
+              return (
+                <Link
+                  key={pageNumber}
+                  href={`?page=${pageNumber}`}
+                  className={`w-9 h-9 flex items-center justify-center rounded-xl text-sm font-semibold transition-all ${
+                    currentPage === pageNumber
+                      ? "bg-linear-to-r from-pink-500 to-violet-500 text-white shadow-md scale-105"
+                      : "text-gray-600 dark:text-gray-400 hover:bg-black/5 dark:hover:bg-white/10"
+                  }`}
+                >
+                  {pageNumber}
+                </Link>
+              );
+            })}
+          </div>
+
+          {/* Next Button */}
+          <Link
+            href={`?page=${currentPage + 1}`}
+            className={`px-5 py-2.5 rounded-xl border border-black/10 dark:border-white/10 text-sm font-medium transition-all ${
+              currentPage >= displayTotalPages
+                ? "opacity-40 pointer-events-none bg-gray-100 dark:bg-zinc-900 text-gray-400"
+                : "bg-white dark:bg-zinc-900 text-gray-800 dark:text-gray-200 hover:border-cyan-500"
+            }`}
+          >
+            Next →
+          </Link>
+        </div>
+      )}
     </section>
   );
 };

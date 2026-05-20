@@ -4,10 +4,21 @@ import { Button, Table } from "@heroui/react";
 import Cansel from "./Cansel";
 import Link from "next/link";
 
-const AdoptionStats = ({ adoptUser }) => {
-  console.log(adoptUser);
+const AdoptionStats = ({ adoptUser = [] }) => {
+  const formatDate = (dateString) => {
+    if (!dateString) return null;
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return dateString;
+
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
   return (
-    <section className="w-full overflow-hidden px-5">
+    <section className="w-full overflow-hidden">
       <Table aria-label="Adoption stats table">
         <Table.ScrollContainer>
           <Table.Content aria-label="Adoption stats table" className="w-full">
@@ -23,57 +34,63 @@ const AdoptionStats = ({ adoptUser }) => {
               </Table.Column>
             </Table.Header>
             <Table.Body>
-              {adoptUser.map((item) => (
-                <Table.Row key={item._id}>
-                  <Table.Cell>{item.name}</Table.Cell>
-                  <Table.Cell>{item.pickupDate}</Table.Cell>
-                  <Table.Cell>
-                    {new Date(item.date).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </Table.Cell>
-                  <Table.Cell>
-                    <span
-                      className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full ${
-                        item.status === "approved"
-                          ? "bg-green-100 dark:bg-green-500/10 text-green-600 dark:text-green-400"
-                          : item.status === "rejected"
-                            ? "bg-red-100 dark:bg-red-500/10 text-red-500 dark:text-red-400"
-                            : "bg-yellow-100 dark:bg-yellow-500/10 text-yellow-600 dark:text-yellow-400"
-                      }`}
-                    >
+              {adoptUser.map((item) => {
+                const dynamicPickupDate =
+                  formatDate(item.pickupDate) ||
+                  formatDate(item.updatedAt) ||
+                  "Today";
+                return (
+                  <Table.Row key={item._id}>
+                    <Table.Cell>{item.name}</Table.Cell>
+                    <Table.Cell>{formatDate(item.date) || "—"}</Table.Cell>
+                    <Table.Cell>
+                      {item.status === "approved" ? (
+                        <span className="text-slate-300 font-semibold bg-green-500/10 px-2 py-1 rounded-lg text-xs">
+                          📅 {dynamicPickupDate}
+                        </span>
+                      ) : item.status === "rejected" ? (
+                        <span className="text-slate-500 line-through">
+                          Cancelled
+                        </span>
+                      ) : (
+                        <span className="text-slate-400 italic text-xs">
+                          Awaiting Approval
+                        </span>
+                      )}
+                    </Table.Cell>
+                    <Table.Cell>
                       <span
-                        className={`w-1.5 h-1.5 rounded-full ${
+                        className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full ${
                           item.status === "approved"
-                            ? "bg-green-500"
+                            ? "bg-green-500/10 text-green-400"
                             : item.status === "rejected"
-                              ? "bg-red-500"
-                              : "bg-yellow-500"
+                              ? "bg-red-500/10 text-red-400"
+                              : "bg-yellow-500/10 text-yellow-400"
                         }`}
-                      />
-                      {item.status}
-                    </span>
-                  </Table.Cell>
-                  <Table.Cell className="text-right">
-                    <div className="flex gap-2 items-center justify-end">
-                      <Link href={`/all-pate/${item.petId}`}>
-                        <Button
-                          size="sm"
-                          variant="bordered"
-                          className="text-slate-600 dark:text-slate-300 border-slate-300 dark:border-white/10 hover:border-rose-400 hover:text-rose-500 transition-all"
-                        >
-                          View
-                        </Button>
-                      </Link>
-
-                      {/* cansel button */}
-                      <Cansel adoptId={item._id} />
-                    </div>
-                  </Table.Cell>
-                </Table.Row>
-              ))}
+                      >
+                        <span
+                          className={`w-1.5 h-1.5 rounded-full ${item.status === "approved" ? "bg-green-500" : item.status === "rejected" ? "bg-red-500" : "bg-yellow-500"}`}
+                        />
+                        {item.status}
+                      </span>
+                    </Table.Cell>
+                    <Table.Cell className="text-right">
+                      <div className="flex gap-2 items-center justify-end">
+                        <Link href={`/all-pate/${item.petId}`}>
+                          <Button
+                            size="sm"
+                            variant="bordered"
+                            className="text-slate-300 border-white/10 hover:border-rose-400 hover:text-rose-500 transition-all"
+                          >
+                            View
+                          </Button>
+                        </Link>
+                        <Cansel adoptId={item._id} />
+                      </div>
+                    </Table.Cell>
+                  </Table.Row>
+                );
+              })}
             </Table.Body>
           </Table.Content>
         </Table.ScrollContainer>
