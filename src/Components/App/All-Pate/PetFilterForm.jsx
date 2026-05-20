@@ -1,13 +1,14 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export default function PetFilterForm({ handleSearch }) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const [name, setName] = useState(searchParams.get("name") || "");
+  const isFirstRender = useRef(true);
 
   const currentSpecies = searchParams.get("species") || "Select species";
   const currentSort = searchParams.get("sort") || "Default";
@@ -18,6 +19,12 @@ export default function PetFilterForm({ handleSearch }) {
     currentSort !== "Default";
 
   useEffect(() => {
+    // ✅ প্রথম রেন্ডারে useEffect চলবে না
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
     const delayDebounceFn = setTimeout(() => {
       const params = new URLSearchParams(searchParams.toString());
 
@@ -26,15 +33,14 @@ export default function PetFilterForm({ handleSearch }) {
       } else {
         params.delete("name");
       }
-      params.set("page", "1"); // সার্চ করলে সবসময় পেজ ১ এ যাবে
+      params.set("page", "1");
 
       router.push(`/all-pate?${params.toString()}`, { scroll: false });
-    }, 500); // ৫০০ms ওয়েট করবে (টাইপ করার সময় ফোকাস সরবে না)
+    }, 500);
 
     return () => clearTimeout(delayDebounceFn);
   }, [name, router, searchParams]);
 
-  // ড্রপডাউনগুলোর জন্য ইনস্ট্যান্ট ইউআরএল আপডেট ফাংশন
   const handleSelectChange = (fieldName, value) => {
     const params = new URLSearchParams(searchParams.toString());
     if (value && value !== "Select species" && value !== "Default") {
@@ -49,6 +55,7 @@ export default function PetFilterForm({ handleSearch }) {
   const handleCancelFilters = (e) => {
     e.preventDefault();
     setName("");
+    isFirstRender.current = true;
     window.location.href = "/all-pate?page=1";
   };
 
@@ -105,7 +112,6 @@ export default function PetFilterForm({ handleSearch }) {
           </div>
         </div>
 
-        {/* Select - Species */}
         <div className="lg:col-span-3">
           <label className="text-xs font-medium text-gray-600 dark:text-gray-300 mb-2 block">
             Pet Species
@@ -128,7 +134,6 @@ export default function PetFilterForm({ handleSearch }) {
           </select>
         </div>
 
-        {/* Select - Sort Fee */}
         <div className="lg:col-span-2">
           <label className="text-xs font-medium text-gray-600 dark:text-gray-300 mb-2 block">
             Sort Fee
@@ -145,7 +150,6 @@ export default function PetFilterForm({ handleSearch }) {
           </select>
         </div>
 
-        {/* Search Button */}
         <div className="lg:col-span-2 flex items-end">
           <button
             type="button"

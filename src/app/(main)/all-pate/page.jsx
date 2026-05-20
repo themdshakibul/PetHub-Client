@@ -2,6 +2,7 @@ import PetCard from "@/Components/App/All-Pate/PetCard";
 import PetFilterForm from "@/Components/App/All-Pate/PetFilterForm";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 async function handleSearch(formData) {
   "use server";
@@ -18,19 +19,28 @@ async function handleSearch(formData) {
 
   params.append("page", "1");
 
+  revalidatePath("/all-pate");
   redirect(`/all-pate?${params.toString()}`);
 }
 
 const AllPatePage = async ({ searchParams }) => {
   const resolvedParams = await searchParams;
-  const query = new URLSearchParams(resolvedParams).toString();
+
+  const backendParams = new URLSearchParams();
+  if (resolvedParams?.name) backendParams.append("name", resolvedParams.name);
+  if (resolvedParams?.species)
+    backendParams.append("species", resolvedParams.species);
+  if (resolvedParams?.sort) backendParams.append("sort", resolvedParams.sort);
 
   let petsData = [];
 
   try {
-    const res = await fetch(`http://localhost:9000/all-pets?${query}`, {
-      cache: "no-store",
-    });
+    const res = await fetch(
+      `http://localhost:9000/all-pets?${backendParams.toString()}`,
+      {
+        next: { revalidate: 0 },
+      },
+    );
     if (!res.ok) throw new Error("Failed to fetch data");
     petsData = await res.json();
   } catch (error) {
@@ -52,9 +62,14 @@ const AllPatePage = async ({ searchParams }) => {
   const currentPets = validPetsData.slice(startIndex, endIndex);
 
   const getPageLink = (pageNumber) => {
-    const currentParams = new URLSearchParams(resolvedParams);
-    currentParams.set("page", pageNumber.toString());
-    return `/all-pate?${currentParams.toString()}`;
+    const params = new URLSearchParams();
+
+    if (resolvedParams?.name) params.set("name", resolvedParams.name);
+    if (resolvedParams?.species) params.set("species", resolvedParams.species);
+    if (resolvedParams?.sort) params.set("sort", resolvedParams.sort);
+    params.set("page", pageNumber.toString());
+
+    return `/all-pate?${params.toString()}`;
   };
 
   return (
