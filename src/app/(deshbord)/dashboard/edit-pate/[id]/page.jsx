@@ -21,7 +21,17 @@ export default function EditPate({ params }) {
     const fetchPetData = async () => {
       if (!petId) return;
 
-      const res = await fetch(`http://localhost:9000/pet/${petId}`);
+      const { data: tokenData } = await authClient.token();
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/pet/${petId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${tokenData?.token}`,
+          },
+        },
+      );
       const petData = await res.json();
 
       if (res.ok && petData) {
@@ -45,13 +55,19 @@ export default function EditPate({ params }) {
     if (updatedPetData.adoptionFee)
       updatedPetData.adoptionFee = Number(updatedPetData.adoptionFee);
 
-    const res = await fetch(`http://localhost:9000/mylisting/${petId}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
+    const { data: tokenData } = await authClient.token();
+
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/mylisting/${petId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${tokenData?.token}`,
+        },
+        body: JSON.stringify(updatedPetData),
       },
-      body: JSON.stringify(updatedPetData),
-    });
+    );
 
     if (res.ok) {
       toast.success("Updated Successfully!");

@@ -1,5 +1,6 @@
 "use client";
 
+import { authClient } from "@/lib/auth-client";
 import { adoptCansel } from "@/lib/Data";
 import { TriangleExclamation } from "@gravity-ui/icons";
 import { AlertDialog, Button } from "@heroui/react";
@@ -8,7 +9,10 @@ import toast from "react-hot-toast";
 
 const Cansel = ({ adoptId }) => {
   const handelCansel = async () => {
-    const canselData = await adoptCansel(adoptId);
+
+    const {data:tokenData} = await authClient.token()
+
+    const canselData = await adoptCansel(adoptId, tokenData);
     if (canselData) {
       toast.success("Cansel Successfull!");
       window.location.reload();

@@ -49,7 +49,7 @@ export const AdoptionFormCard = ({ petInfo }) => {
     const fieldData = {
       userId: user.id,
       petId: _id,
-      
+
       usrName: user.name,
       ...petData,
       _id,
@@ -67,7 +67,8 @@ export const AdoptionFormCard = ({ petInfo }) => {
       date: new Date(date),
     };
 
-    const adopt = await adoptUserPet(fieldData);
+    const { data: tokenData } = await authClient.token();
+    const adopt = await adoptUserPet(fieldData, tokenData);
 
     if (adopt) {
       toast.success("Adopt Successful!");

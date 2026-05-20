@@ -36,7 +36,7 @@ const AllPatePage = async ({ searchParams }) => {
 
   try {
     const res = await fetch(
-      `http://localhost:9000/all-pets?${backendParams.toString()}`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/all-pets?${backendParams.toString()}`,
       {
         next: { revalidate: 0 },
       },
@@ -44,7 +44,6 @@ const AllPatePage = async ({ searchParams }) => {
     if (!res.ok) throw new Error("Failed to fetch data");
     petsData = await res.json();
   } catch (error) {
-    console.error("Error fetching pets:", error);
     petsData = [];
   }
 

@@ -1,25 +1,32 @@
 export const feturedPet = async () => {
-  const res = await fetch(`http://localhost:9000/featurepet`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/featurepet`);
   const data = await res.json();
   return data;
 };
 
 export const getPetsData = async () => {
-  const res = await fetch(`http://localhost:9000/pets`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/pets`);
   const data = await res.json();
   return data;
 };
 
-export const getPetsDataBYId = async (id) => {
-  const res = await fetch(`http://localhost:9000/pets/${id}`);
+export const getPetsDataBYId = async (id, token) => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/pets/${id}`, {
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  });
   const data = await res.json();
   return data;
 };
 
-export const createPate = async (petData) => {
-  const res = await fetch("http://localhost:9000/pets", {
+export const createPate = async (petData, tokenData) => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/pets`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${tokenData?.token}`,
+    },
     body: JSON.stringify(petData),
   });
   const data = await res.json();
@@ -27,27 +34,42 @@ export const createPate = async (petData) => {
 };
 
 // AdoptFormCard
-export const getAdoptUserPet = async (user) => {
-  const res = await fetch(`http://localhost:9000/adopt/${user?.id}`);
+export const getAdoptUserPet = async (user, token) => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/adopt/${user?.id}`,
+    {
+      authorization: `Bearer ${token}`,
+    },
+  );
   const data = await res.json();
   return data;
 };
 
-export const adoptUserPet = async (fieldData) => {
-  const res = await fetch("http://localhost:9000/adopt", {
+export const adoptUserPet = async (fieldData, tokenData) => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/adopt`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${tokenData?.token}`,
+    },
     body: JSON.stringify(fieldData),
   });
   const data = await res.json();
   return data;
 };
 
-export const adoptCansel = async (adoptId) => {
-  const res = await fetch(`http://localhost:9000/adopt/${adoptId}`, {
-    method: "DELETE",
-    headers: { "Content-Type": "application/json" },
-  });
+// done;
+export const adoptCansel = async (adoptId, tokenData) => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/adopt/${adoptId}`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${tokenData?.token}`,
+      },
+    },
+  );
   const data = await res.json();
   return data;
 };

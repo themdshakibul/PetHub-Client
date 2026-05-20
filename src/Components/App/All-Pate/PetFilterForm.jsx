@@ -8,7 +8,7 @@ export default function PetFilterForm({ handleSearch }) {
   const searchParams = useSearchParams();
 
   const [name, setName] = useState(searchParams.get("name") || "");
-  const isFirstRender = useRef(true);
+  const isFirstRender = useRef(true); 
 
   const currentSpecies = searchParams.get("species") || "Select species";
   const currentSort = searchParams.get("sort") || "Default";
@@ -19,7 +19,7 @@ export default function PetFilterForm({ handleSearch }) {
     currentSort !== "Default";
 
   useEffect(() => {
-    // ✅ প্রথম রেন্ডারে useEffect চলবে না
+    
     if (isFirstRender.current) {
       isFirstRender.current = false;
       return;
@@ -39,7 +39,7 @@ export default function PetFilterForm({ handleSearch }) {
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [name, router, searchParams]);
+  }, [name]); 
 
   const handleSelectChange = (fieldName, value) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -55,7 +55,7 @@ export default function PetFilterForm({ handleSearch }) {
   const handleCancelFilters = (e) => {
     e.preventDefault();
     setName("");
-    isFirstRender.current = true;
+    isFirstRender.current = true; 
     window.location.href = "/all-pate?page=1";
   };
 

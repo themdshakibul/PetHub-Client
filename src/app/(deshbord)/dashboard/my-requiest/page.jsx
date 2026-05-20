@@ -12,7 +12,12 @@ const MyRequistPage = async () => {
   });
 
   const user = session?.user;
-  const adoptUser = await getAdoptUserPet(user);
+
+  const { token } = await auth.api.getToken({
+    headers: await headers(),
+  });
+
+  const adoptUser = await getAdoptUserPet(user, token);
 
   const hasNoData = !adoptUser || adoptUser.length === 0;
 

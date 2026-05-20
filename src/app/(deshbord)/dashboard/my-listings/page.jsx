@@ -23,7 +23,7 @@ const MyListingPage = () => {
       setLoading(true);
 
       const res = await fetch(
-        `http://localhost:9000/mylisting?email=${user.email}`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/mylisting?email=${user.email}`,
       );
       const petData = await res.json();
 
@@ -58,11 +58,6 @@ const MyListingPage = () => {
       )}
 
       {loading ? (
-        // <div className="flex justify-center items-center h-48">
-        //   <p className="text-lg font-semibold text-slate-500 dark:text-slate-400 animate-pulse">
-        //     🐾 Loading your pet listings...
-        //   </p>
-        // </div>
         <LodingPage />
       ) : hasNoData ? (
         <div className="w-full">

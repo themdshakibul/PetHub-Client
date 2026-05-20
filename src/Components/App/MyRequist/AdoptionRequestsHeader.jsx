@@ -12,51 +12,53 @@ const AdoptionRequestsHeader = ({ adoptUser }) => {
     {
       label: "Total",
       value: total,
-      color: "text-white",
-      bg: "bg-[#0d1527]",
-      border: "border-white/5",
-      dot: "bg-slate-500",
+      dot: "bg-slate-400 dark:bg-slate-500",
+      labelColor: "text-slate-500 dark:text-slate-400",
+      valueColor: "text-slate-800 dark:text-slate-100",
+      card: "bg-slate-50 border-slate-200 dark:bg-[#0d1527] dark:border-white/5",
     },
     {
       label: "Pending",
       value: pending,
-      color: "text-yellow-400",
-      bg: "bg-[#0d1527]",
-      border: "border-white/5",
-      dot: "bg-yellow-400",
+      dot: "bg-amber-400 dark:bg-yellow-400",
+      labelColor: "text-amber-900 dark:text-slate-400",
+      valueColor: "text-amber-500 dark:text-yellow-400",
+      card: "bg-slate-50 border-slate-200 dark:bg-[#0d1527] dark:border-white/5",
     },
     {
       label: "Approved",
       value: approved,
-      color: "text-green-400",
-      bg: "bg-[#0d1527]",
-      border: "border-white/5",
-      dot: "bg-green-400",
+      dot: "bg-emerald-400 dark:bg-green-400",
+      labelColor: "text-emerald-900 dark:text-slate-400",
+      valueColor: "text-emerald-500 dark:text-green-400",
+      card: "bg-slate-50 border-slate-200 dark:bg-[#0d1527] dark:border-white/5",
     },
     {
       label: "Rejected",
       value: rejected,
-      color: "text-red-400",
-      bg: "bg-[#0d1527]",
-      border: "border-white/5",
-      dot: "bg-red-400",
+      dot: "bg-red-400 dark:bg-red-400",
+      labelColor: "text-red-900 dark:text-slate-400",
+      valueColor: "text-red-500 dark:text-red-400",
+      card: "bg-slate-50 border-slate-200 dark:bg-[#0d1527] dark:border-white/5",
     },
   ];
 
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-      {stats.map(({ label, value, color, bg, border, dot }) => (
+      {stats.map(({ label, value, dot, labelColor, valueColor, card }) => (
         <div
           key={label}
-          className={`${bg} ${border} border rounded-2xl p-6 flex flex-col items-center justify-center gap-1.5 shadow-md`}
+          className={`${card} border rounded-2xl p-6 flex flex-col items-center justify-center gap-1.5 shadow-md`}
         >
           <div className="flex items-center gap-1.5 mb-0.5">
             <span className={`w-1.5 h-1.5 rounded-full ${dot}`} />
-            <span className="text-slate-400 text-xs font-medium uppercase tracking-wider">
+            <span
+              className={`${labelColor} text-xs font-medium uppercase tracking-wider`}
+            >
               {label}
             </span>
           </div>
-          <span className={`text-3xl font-bold ${color}`}>{value}</span>
+          <span className={`text-3xl font-bold ${valueColor}`}>{value}</span>
         </div>
       ))}
     </div>

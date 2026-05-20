@@ -39,7 +39,9 @@ export default function AddPetForm() {
       return;
     }
 
-    const addPate = await createPate(payload);
+    const {data:tokenData} = await authClient.token()
+    
+    const addPate = await createPate(payload, tokenData);
 
     if (addPate) {
       toast.success(`${petData.petName} Added Successfully!`);
