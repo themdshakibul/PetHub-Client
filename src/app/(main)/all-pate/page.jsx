@@ -1,25 +1,61 @@
 import PetCard from "@/Components/App/All-Pate/PetCard";
-import { getPetsData } from "@/lib/Data";
+import PetFilterForm from "@/Components/App/All-Pate/PetFilterForm";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+
+async function handleSearch(formData) {
+  "use server";
+  const name = formData.get("name")?.toString().trim();
+  const species = formData.get("species");
+  const sort = formData.get("sort");
+
+  const params = new URLSearchParams();
+
+  if (name) params.append("name", name);
+  if (species && species !== "Select species")
+    params.append("species", species);
+  if (sort && sort !== "Default") params.append("sort", sort);
+
+  params.append("page", "1");
+
+  redirect(`/all-pate?${params.toString()}`);
+}
 
 const AllPatePage = async ({ searchParams }) => {
   const resolvedParams = await searchParams;
+  const query = new URLSearchParams(resolvedParams).toString();
+
+  let petsData = [];
+
+  try {
+    const res = await fetch(`http://localhost:9000/all-pets?${query}`, {
+      cache: "no-store",
+    });
+    if (!res.ok) throw new Error("Failed to fetch data");
+    petsData = await res.json();
+  } catch (error) {
+    console.error("Error fetching pets:", error);
+    petsData = [];
+  }
+
   const currentPage = Number(resolvedParams?.page) || 1;
   const itemsPerPage = 9;
 
-  const pestsData = await getPetsData();
-  const totalPets = pestsData.length;
-  const totalPages = Math.ceil(totalPagesCount(totalPets, itemsPerPage));
+  const validPetsData = Array.isArray(petsData) ? petsData : [];
+  const totalPets = validPetsData.length;
+
+  const totalPages = Math.ceil(totalPets / itemsPerPage);
+  const displayTotalPages = totalPages > 0 ? totalPages : 1;
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentPets = pestsData.slice(startIndex, endIndex);
+  const currentPets = validPetsData.slice(startIndex, endIndex);
 
-  const displayTotalPages = totalPages > 0 ? totalPages : 1;
-
-  function totalPagesCount(total, perPage) {
-    return total / perPage;
-  }
+  const getPageLink = (pageNumber) => {
+    const currentParams = new URLSearchParams(resolvedParams);
+    currentParams.set("page", pageNumber.toString());
+    return `/all-pate?${currentParams.toString()}`;
+  };
 
   return (
     <section className="relative py-10 overflow-hidden bg-white dark:bg-black transition-all duration-300">
@@ -44,7 +80,6 @@ const AllPatePage = async ({ searchParams }) => {
             </p>
           </div>
 
-          {/* Total Available Stats */}
           <div className="bg-black/3 dark:bg-white/5 border border-black/10 dark:border-white/10 backdrop-blur-xl px-5 py-4 rounded-2xl min-w-34">
             <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
               {totalPets}+
@@ -55,90 +90,34 @@ const AllPatePage = async ({ searchParams }) => {
           </div>
         </div>
 
-        {/* Filter Card */}
-        <div className="relative border border-black/10 dark:border-white/10 bg-black/3 dark:bg-white/5 backdrop-blur-2xl rounded-[32px] p-6 md:p-8 shadow-[0_0_60px_rgba(0,255,255,0.06)]">
-          <div className="absolute -top-20 right-0 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl"></div>
-
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-pink-500 to-violet-500 flex items-center justify-center text-white text-xl shadow-lg">
-              ⚡
-            </div>
-            <div>
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                Search & Filter
-              </h2>
-              <p className="text-gray-500 dark:text-gray-400 text-xs mt-1">
-                Find pets easily with smart filters.
-              </p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-            <div className="lg:col-span-5">
-              <label className="text-xs font-medium text-gray-600 dark:text-gray-300 mb-2 block">
-                Search by pet name
-              </label>
-              <div className="relative">
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-base">
-                  🔍
-                </div>
-                <input
-                  type="text"
-                  placeholder="Search pets..."
-                  className="w-full h-14 rounded-2xl bg-white dark:bg-[#0f172a]/80 border border-black/10 dark:border-white/10 pl-12 pr-4 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 outline-none focus:border-cyan-400 focus:ring-4 focus:ring-cyan-500/10 transition-all"
-                />
-              </div>
-            </div>
-
-            <div className="lg:col-span-3">
-              <label className="text-xs font-medium text-gray-600 dark:text-gray-300 mb-2 block">
-                Pet Species
-              </label>
-              <select className="w-full h-14 rounded-2xl bg-white dark:bg-[#0f172a]/80 border border-black/10 dark:border-white/10 px-4 text-sm text-gray-900 dark:text-white outline-none focus:border-cyan-400 focus:ring-4 focus:ring-cyan-500/10 transition-all">
-                <option>All Species</option>
-                <option>Dogs</option>
-                <option>Cats</option>
-                <option>Birds</option>
-                <option>Rabbits</option>
-              </select>
-            </div>
-
-            <div className="lg:col-span-2">
-              <label className="text-xs font-medium text-gray-600 dark:text-gray-300 mb-2 block">
-                Sort Fee
-              </label>
-              <select className="w-full h-14 rounded-2xl bg-white dark:bg-[#0f172a]/80 border border-black/10 dark:border-white/10 px-4 text-sm text-gray-900 dark:text-white outline-none focus:border-cyan-400 focus:ring-4 focus:ring-cyan-500/10 transition-all">
-                <option>Default</option>
-                <option>Low → High</option>
-                <option>High → Low</option>
-              </select>
-            </div>
-
-            <div className="lg:col-span-2 flex items-end">
-              <button className="w-full h-14 rounded-2xl bg-linear-to-r from-pink-500 via-violet-500 to-cyan-500 text-white font-medium text-sm hover:scale-[1.02] transition-all duration-300 shadow-[0_10px_30px_rgba(168,85,247,0.25)]">
-                Search
-              </button>
-            </div>
-          </div>
-        </div>
+        <PetFilterForm handleSearch={handleSearch} />
       </div>
 
-      {/* Pet Cards Grid (Max 9 Items) */}
+      {/* Pet Cards Grid */}
       <div className="container mx-auto px-2 py-10 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {currentPets.length > 0 ? (
-          currentPets.map((pets, ind) => <PetCard key={ind} pets={pets} />)
+          currentPets.map((pet, ind) => (
+            <PetCard key={pet._id || ind} pets={pet} />
+          ))
         ) : (
-          <div className="col-span-full text-center py-12 text-gray-500">
-            No pets found on this page.
+          <div className="col-span-full text-center py-20 bg-gray-50 dark:bg-white/5 rounded-3xl border border-black/5 dark:border-white/5">
+            <div className="text-5xl mb-3">🔍</div>
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1">
+              No Pets Found
+            </h3>
+            <p className="text-gray-500 dark:text-gray-400 text-sm max-w-sm mx-auto">
+              We couldn&apos;t find any pets matching your criteria. Try
+              adjusting your search or filters.
+            </p>
           </div>
         )}
       </div>
 
+      {/* Pagination Controls */}
       {displayTotalPages > 1 && (
         <div className="container mx-auto px-2 flex justify-center items-center gap-4 mt-6">
-          {/* Previous Button */}
           <Link
-            href={`?page=${currentPage - 1}`}
+            href={getPageLink(currentPage - 1)}
             className={`px-5 py-2.5 rounded-xl border border-black/10 dark:border-white/10 text-sm font-medium transition-all ${
               currentPage <= 1
                 ? "opacity-40 pointer-events-none bg-gray-100 dark:bg-zinc-900 text-gray-400"
@@ -148,14 +127,13 @@ const AllPatePage = async ({ searchParams }) => {
             ← Previous
           </Link>
 
-          {/* Page Indicators */}
           <div className="flex items-center gap-2 bg-black/5 dark:bg-white/5 px-3 py-1.5 rounded-2xl border border-black/5 dark:border-white/5 backdrop-blur-md">
             {Array.from({ length: displayTotalPages }, (_, index) => {
               const pageNumber = index + 1;
               return (
                 <Link
                   key={pageNumber}
-                  href={`?page=${pageNumber}`}
+                  href={getPageLink(pageNumber)}
                   className={`w-9 h-9 flex items-center justify-center rounded-xl text-sm font-semibold transition-all ${
                     currentPage === pageNumber
                       ? "bg-linear-to-r from-pink-500 to-violet-500 text-white shadow-md scale-105"
@@ -168,9 +146,8 @@ const AllPatePage = async ({ searchParams }) => {
             })}
           </div>
 
-          {/* Next Button */}
           <Link
-            href={`?page=${currentPage + 1}`}
+            href={getPageLink(currentPage + 1)}
             className={`px-5 py-2.5 rounded-xl border border-black/10 dark:border-white/10 text-sm font-medium transition-all ${
               currentPage >= displayTotalPages
                 ? "opacity-40 pointer-events-none bg-gray-100 dark:bg-zinc-900 text-gray-400"

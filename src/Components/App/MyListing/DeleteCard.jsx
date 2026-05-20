@@ -2,6 +2,7 @@
 
 import { TriangleExclamation } from "@gravity-ui/icons";
 import { AlertDialog, Button } from "@heroui/react";
+import { redirect } from "next/navigation";
 import toast from "react-hot-toast";
 import { FaTrash } from "react-icons/fa";
 
@@ -59,7 +60,7 @@ const DeleteCard = ({ petId, status }) => {
                 variant="danger"
                 onPress={handleDelete}
               >
-                Delete Forever
+                Delete
               </Button>
             </AlertDialog.Footer>
           </AlertDialog.Dialog>

@@ -7,6 +7,7 @@ import MyListingsHeader from "@/Components/App/MyListing/MyListingsHeader";
 import toast from "react-hot-toast";
 import { Button } from "@heroui/react";
 import Link from "next/link";
+import LodingPage from "@/Components/App/Loding/LodingPage";
 
 const MyListingPage = () => {
   const { data, isPending } = authClient.useSession();
@@ -57,11 +58,12 @@ const MyListingPage = () => {
       )}
 
       {loading ? (
-        <div className="flex justify-center items-center h-48">
-          <p className="text-lg font-semibold text-slate-500 dark:text-slate-400 animate-pulse">
-            🐾 Loading your pet listings...
-          </p>
-        </div>
+        // <div className="flex justify-center items-center h-48">
+        //   <p className="text-lg font-semibold text-slate-500 dark:text-slate-400 animate-pulse">
+        //     🐾 Loading your pet listings...
+        //   </p>
+        // </div>
+        <LodingPage />
       ) : hasNoData ? (
         <div className="w-full">
           <MyListingsHeader listings={myPets} hideStats={true} />
