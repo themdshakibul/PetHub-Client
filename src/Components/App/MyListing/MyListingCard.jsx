@@ -12,6 +12,7 @@ import {
   FaTrash,
 } from "react-icons/fa";
 import { FiEdit2, FiEye } from "react-icons/fi";
+import DeleteCard from "./DeleteCard";
 
 const MyListingCard = ({ pets }) => {
   const router = useRouter();
@@ -31,7 +32,6 @@ const MyListingCard = ({ pets }) => {
     requests,
   } = pets;
 
-  const handleDelete = () => console.log("Delete:", _id);
   const handleRequests = () => console.log("Requests:", _id);
 
   const displayImage =
@@ -150,15 +150,7 @@ const MyListingCard = ({ pets }) => {
             Requests
           </Button>
 
-          {/* ✅ Delete — light/dark দুই মোডেই icon স্পষ্ট দেখাবে */}
-          <Button
-            onPress={handleDelete}
-            size="sm"
-            isDisabled={status === "Adopted"}
-            className="flex-1 bg-red-100 hover:bg-red-200 dark:bg-red-950/20 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 font-black border border-red-300 dark:border-red-500/20 transition-all rounded-lg h-8 min-h-0 shadow-xs flex items-center justify-center"
-          >
-            <FaTrash size={13} />
-          </Button>
+          <DeleteCard />
         </div>
       </CardFooter>
     </Card>

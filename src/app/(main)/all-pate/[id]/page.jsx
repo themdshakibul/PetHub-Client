@@ -10,7 +10,7 @@ const PetDetailsPage = async ({ params }) => {
   const { petName, status } = petInfo;
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white p-4 md:p-10">
+    <div className="min-h-screen  text-white p-4 md:p-10">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Left Side: Pet Info (Always Visible) */}
         <div className="lg:col-span-7">

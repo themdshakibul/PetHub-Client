@@ -52,6 +52,17 @@ const SignupPage = () => {
     }
   };
 
+  const signUpWidthGoogle = async () => {
+    await authClient.signIn.social({
+      provider: "google",
+    });
+
+    if (data) {
+      toast.success("Sigin Successfull!");
+      redirect("/");
+    }
+  };
+
   return (
     <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-50 px-4 py-12 transition-colors duration-300 dark:bg-slate-950">
       {/* Background Decor */}
@@ -148,8 +159,8 @@ const SignupPage = () => {
                 placeholder="••••••••"
                 variant="bordered"
                 radius="xl"
-                value={passwordValue} // Controlled Value
-                onChange={(e) => setPasswordValue(e.target.value)} // টাইপ করা নিশ্চিত করতে
+                value={passwordValue}
+                onChange={(e) => setPasswordValue(e.target.value)}
                 classNames={{
                   inputWrapper:
                     "bg-black/[0.02] border-black/10 h-11 dark:bg-white/[0.02] dark:border-white/10",
@@ -234,6 +245,7 @@ const SignupPage = () => {
         </div>
 
         <Button
+          onClick={signUpWidthGoogle}
           fullWidth
           variant="bordered"
           radius="xl"

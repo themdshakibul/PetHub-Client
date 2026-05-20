@@ -41,6 +41,17 @@ const SiginPage = () => {
     }
   };
 
+  const siginWidthGoogle = async () => {
+    const data = await authClient.signIn.social({
+      provider: "google",
+    });
+
+    if (data.success) {
+      toast.success("Sigin Successfull");
+      redirect("/");
+    }
+  };
+
   return (
     <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-50 px-4 py-12 selection:bg-primary-500/30 transition-colors duration-300 dark:bg-slate-950">
       <div className="absolute top-1/4 left-1/4 h-125 w-125 -translate-x-1/2 -translate-y-1/2 rounded-full bg-linear-to-tr from-indigo-400/40 via-purple-400/40 to-pink-400/40 opacity-40 blur-[130px] animate-pulse duration-6000 dark:from-indigo-500 dark:via-purple-500 dark:to-pink-500" />
@@ -54,10 +65,8 @@ const SiginPage = () => {
         /* Dark Mode Glass */
         dark:border-white/15 dark:bg-white/4 dark:shadow-[0_25px_60px_-15px_rgba(0,0,0,0.7)] dark:hover:border-white/25 dark:hover:bg-white/6"
       >
-        {/* রিয়েল-টাইম লাইট রিফ্লেকশন এফেক্ট টপ বর্ডার */}
         <div className="absolute inset-x-0 top-0 h-px rounded-t-3xl bg-linear-to-r from-transparent via-black/10 to-transparent dark:via-white/30" />
 
-        {/* লোগো এবং হেডার */}
         <div className="mb-8 text-center">
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-black/10 bg-black/5 text-2xl shadow-inner backdrop-blur-md transition-transform duration-300 hover:scale-110 dark:border-white/15 dark:bg-white/10">
             🐾
@@ -182,6 +191,7 @@ const SiginPage = () => {
         </div>
 
         <Button
+          onClick={siginWidthGoogle}
           fullWidth
           variant="bordered"
           radius="xl"
