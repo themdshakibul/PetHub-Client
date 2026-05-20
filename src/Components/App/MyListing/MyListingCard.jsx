@@ -140,7 +140,7 @@ const MyListingCard = ({ pets }) => {
         </div>
 
         {/* Row 2: Requests + Delete */}
-        <div className="flex gap-1.5 w-full">
+        <div className="grid grid-cols-2 gap-1.5 w-full">
           <Button
             onPress={handleRequests}
             size="sm"
@@ -150,7 +150,7 @@ const MyListingCard = ({ pets }) => {
             Requests
           </Button>
 
-          <DeleteCard />
+          <DeleteCard petId={_id} status={status} />
         </div>
       </CardFooter>
     </Card>
