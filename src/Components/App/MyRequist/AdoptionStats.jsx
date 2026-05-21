@@ -35,56 +35,71 @@ const AdoptionStats = ({ adoptUser = [] }) => {
             </Table.Header>
             <Table.Body>
               {adoptUser.map((item) => {
-                const dynamicPickupDate =
-                  formatDate(item.pickupDate) ||
-                  formatDate(item.updatedAt) ||
-                  "Today";
+                const currentStatus = item.status || "pending";
+
+                const displayPickupDate = item.pickupDate || item.date;
+
+                const displayRequestDate = item.requestDate || null;
+
                 return (
                   <Table.Row key={item._id}>
-                    <Table.Cell>{item.name}</Table.Cell>
-                    <Table.Cell>{formatDate(item.date) || "—"}</Table.Cell>
+                    <Table.Cell>{item.petName || item.name || "—"}</Table.Cell>
+
                     <Table.Cell>
-                      {item.status === "approved" ? (
-                        <span className="text-slate-300 font-semibold bg-green-500/10 px-2 py-1 rounded-lg text-xs">
-                          📅 {dynamicPickupDate}
-                        </span>
-                      ) : item.status === "rejected" ? (
-                        <span className="text-slate-500 line-through">
-                          Cancelled
+                      {formatDate(displayPickupDate) || "—"}
+                    </Table.Cell>
+
+                    <Table.Cell>
+                      {displayRequestDate ? (
+                        <span className="text-slate-300 font-semibold bg-blue-500/10 px-2 py-1 rounded-lg text-xs establishment-badge">
+                          📅 {formatDate(displayRequestDate)}
                         </span>
                       ) : (
-                        <span className="text-slate-400 italic text-xs">
-                          Awaiting Approval
-                        </span>
+                        <span className="text-slate-500">—</span>
                       )}
                     </Table.Cell>
+
                     <Table.Cell>
                       <span
                         className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full ${
-                          item.status === "approved"
+                          currentStatus === "approved"
                             ? "bg-green-500/10 text-green-400"
-                            : item.status === "rejected"
+                            : currentStatus === "rejected"
                               ? "bg-red-500/10 text-red-400"
                               : "bg-yellow-500/10 text-yellow-400"
                         }`}
                       >
                         <span
-                          className={`w-1.5 h-1.5 rounded-full ${item.status === "approved" ? "bg-green-500" : item.status === "rejected" ? "bg-red-500" : "bg-yellow-500"}`}
+                          className={`w-1.5 h-1.5 rounded-full ${
+                            currentStatus === "approved"
+                              ? "bg-green-500"
+                              : currentStatus === "rejected"
+                                ? "bg-red-500"
+                                : "bg-yellow-500"
+                          }`}
                         />
-                        {item.status}
+                        {currentStatus.charAt(0).toUpperCase() +
+                          currentStatus.slice(1)}
                       </span>
                     </Table.Cell>
+
                     <Table.Cell className="text-right">
                       <div className="flex gap-2 items-center justify-end">
-                        <Link href={`/all-pate/${item.petId}`}>
+                        <Link
+                          href={`/all-pate/${item.petId}`}
+                          passHref
+                          legacyBehavior
+                        >
                           <Button
                             size="sm"
                             variant="bordered"
-                            className="text-slate-300 border-white/10 hover:border-rose-400 hover:text-rose-500 transition-all"
+                            className="text-slate-600 dark:text-slate-300 border-slate-200 dark:border-white/10 hover:border-rose-400 dark:hover:border-rose-400 hover:text-rose-500 dark:hover:text-rose-500 transition-all font-medium"
                           >
                             View
                           </Button>
                         </Link>
+
+                        {/* Cancel Button / Component */}
                         <Cansel adoptId={item._id} />
                       </div>
                     </Table.Cell>

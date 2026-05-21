@@ -8,6 +8,12 @@ import { headers } from "next/headers";
 const PetDetailsPage = async ({ params }) => {
   const { id } = await params;
 
+  const sesson = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  const user = sesson?.user;
+
   const { token } = await auth.api.getToken({
     headers: await headers(),
   });
@@ -23,7 +29,8 @@ const PetDetailsPage = async ({ params }) => {
         </div>
 
         <div className="lg:col-span-5">
-          {status === "Available" ? (
+          {status?.toLowerCase() === "available" &&
+          user?.email !== petInfo?.ownerEmail ? (
             <AdoptionFormCard petInfo={petInfo} />
           ) : (
             <SuccessAdoptedCard petName={petName} />

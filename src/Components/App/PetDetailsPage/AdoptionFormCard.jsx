@@ -15,7 +15,7 @@ import {
 } from "react-icons/fa";
 
 export const AdoptionFormCard = ({ petInfo }) => {
-  const [date, setDate] = useState(null);
+  const [date, setDate] = useState(null); 
   const [isAdopted, setIsAdopted] = useState(false);
 
   const { data } = authClient.useSession();
@@ -49,7 +49,6 @@ export const AdoptionFormCard = ({ petInfo }) => {
     const fieldData = {
       userId: user.id,
       petId: _id,
-
       usrName: user.name,
       ...petData,
       _id,
@@ -64,8 +63,12 @@ export const AdoptionFormCard = ({ petInfo }) => {
       gender,
       adoptionFee,
       species,
-      date: new Date(date),
+
+      pickupDate: new Date(date),
+      requestDate: new Date().toISOString(),
     };
+
+    console.log("Submitting Field Data:", fieldData);
 
     const { data: tokenData } = await authClient.token();
     const adopt = await adoptUserPet(fieldData, tokenData);
@@ -169,7 +172,7 @@ export const AdoptionFormCard = ({ petInfo }) => {
                 className="absolute left-4 top-1/2 -translate-y-1/2 text-rose-500/70 z-10"
                 size={14}
               />
-              <DateField onChange={setDate} name="date">
+              <DateField onChange={setDate} name="pickupDate">
                 <DateField.Group className="w-full bg-white dark:bg-white/5 border border-slate-300 dark:border-white/10 hover:border-rose-400 focus-within:border-rose-500 h-12 pl-7 pr-4 rounded-2xl text-slate-900 dark:text-slate-100 outline-none transition-all flex items-center">
                   <DateField.Input>
                     {(segment) => <DateField.Segment segment={segment} />}

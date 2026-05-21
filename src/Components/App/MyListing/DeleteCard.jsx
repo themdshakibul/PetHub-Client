@@ -3,7 +3,6 @@
 import { authClient } from "@/lib/auth-client";
 import { TriangleExclamation } from "@gravity-ui/icons";
 import { AlertDialog, Button } from "@heroui/react";
-import { redirect } from "next/navigation";
 import toast from "react-hot-toast";
 import { FaTrash } from "react-icons/fa";
 

@@ -92,8 +92,7 @@ const PetCard = ({ pets }) => {
           </div>
         </div>
 
-        {/* Footer Buttons */}
-        <CardFooter className="px-6 pb-8 pt-2 gap-3">
+        <CardFooter className="px-6 pb-8 pt-2 gap-3 flex">
           <Link
             href={`/all-pate/${_id}`}
             className="w-full bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-white font-bold border border-slate-200 dark:border-white/10 hover:bg-slate-200 dark:hover:bg-white/10 transition-all py-3 rounded-xl text-center flex items-center justify-center dashboard-btn"
@@ -101,24 +100,19 @@ const PetCard = ({ pets }) => {
             Details
           </Link>
 
-          <Link href={`/all-pate/${_id}`}>
-            <Button
-              fullWidth
-              disabled={status === "Adopted"}
-              startContent={
-                status !== "Adopted" && (
-                  <HiOutlineLightningBolt className="animate-pulse" />
-                )
-              }
-              className={`font-black shadow-lg hover:-translate-y-1 transition-all py-6 rounded-xl ${
-                status === "Adopted"
-                  ? "bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed"
-                  : "bg-linear-to-br from-[#FF8B94] via-[#ff4d6d] to-[#7CCAD5] text-white"
-              }`}
+          {status === "Adopted" ? (
+            <div className="w-full text-center font-black shadow-lg py-3 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed flex items-center justify-center">
+              Adopted
+            </div>
+          ) : (
+            <Link
+              href={`/all-pate/${_id}`}
+              className="w-full text-center font-black shadow-lg hover:-translate-y-1 transition-all py-3 rounded-xl bg-linear-to-br from-[#FF8B94] via-[#ff4d6d] to-[#7CCAD5] text-white flex items-center justify-center gap-2"
             >
-              {status === "Adopted" ? "Adopted" : "Adopt Now"}
-            </Button>
-          </Link>
+              <HiOutlineLightningBolt className="animate-pulse" />
+              Adopt Now
+            </Link>
+          )}
         </CardFooter>
       </Card>
     </>
