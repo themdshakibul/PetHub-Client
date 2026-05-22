@@ -55,7 +55,7 @@ export const AdoptionFormCard = ({ petInfo }) => {
       petName,
       petImageUrl,
       category,
-      status,
+      status: "pending",
       healthStatus,
       description,
       age,

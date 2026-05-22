@@ -112,26 +112,29 @@ export default function HeroSection({
 
           <Card
             className="
-              absolute left-0 top-6 w-44
-              bg-white text-black shadow-2xl
-              dark:bg-[#111827]
-              dark:text-white
-              sm:-left-8 sm:top-10 sm:w-60
+              absolute -left-14 -top-10
+              -rotate-6 w-max min-w-45 sm:min-w-60 shrink-0
+              bg-white/90 text-black shadow-2xl backdrop-blur-md
+              dark:bg-[#111827]/90 dark:text-white
               animate-appearance-in animate-delay-300 animate-duration-700
-              hover:-translate-y-1 transition-transform duration-300
+              hover:-translate-y-1 transition-all duration-300
+              rounded-2xl border border-gray-200 dark:border-white/10
             "
           >
             <div className="flex items-center gap-3 p-3 sm:gap-4 sm:p-4">
-              <Image
-                width={300}
-                height={300}
-                src="https://i.pravatar.cc/50"
-                alt="avatar"
-                className="h-10 w-10 rounded-full object-cover sm:h-12 sm:w-12"
-              />
-              <div>
-                <h4 className="text-sm font-semibold sm:text-base">Bella</h4>
-                <p className="text-xs text-gray-500 dark:text-gray-400 sm:text-sm">
+              <div className="relative h-10 w-10 sm:h-12 sm:w-12 shrink-0">
+                <Image
+                  fill
+                  src="https://i.pravatar.cc/50"
+                  alt="avatar"
+                  className="rounded-full object-cover"
+                />
+              </div>
+              <div className="text-left">
+                <h4 className="text-sm font-bold sm:text-base leading-tight">
+                  Bella
+                </h4>
+                <p className="text-[11px] sm:text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap mt-0.5">
                   Looking for a new home
                 </p>
               </div>

@@ -13,7 +13,7 @@ import { Menu, X, FileText, PlusCircle, Heart, LogOut } from "lucide-react";
 const DashboardLayout = ({ children }) => {
   const { data } = authClient.useSession();
   const user = data?.user;
-  console.log(user, "user profile");
+
   const pathname = usePathname();
   const router = useRouter();
 

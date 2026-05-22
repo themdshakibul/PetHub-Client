@@ -32,12 +32,12 @@ const SiginPage = () => {
     });
 
     if (data) {
-      toast.success("SuccessFull Sign In");
+      toast.success("Successfulli Sign In!");
       redirect("/");
     }
 
     if (error) {
-      toast.error("Rejestison feails");
+      toast.error(error.message);
     }
   };
 
