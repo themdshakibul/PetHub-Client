@@ -22,8 +22,9 @@ const DeleteCard = ({ petId, status }) => {
 
     if (res.ok) {
       toast.success("Successfully deleted!");
-      window.location.reload();
       
+      window.location.reload();
+
     }
   };
 
