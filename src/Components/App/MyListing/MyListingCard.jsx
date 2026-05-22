@@ -181,13 +181,6 @@ const MyListingCard = ({ pets }) => {
           </div>
         </CardFooter>
       </Card>
-      {/* <RequestModal
-        isOpen={isOpen}
-        onOpenChange={(val) => setIsOpen(val)}
-        petName={petName}
-        petRequests={petRequests}
-        setPetRequests={setPetRequests}
-      /> */}
 
       <RequestModal
         isOpen={isOpen}
