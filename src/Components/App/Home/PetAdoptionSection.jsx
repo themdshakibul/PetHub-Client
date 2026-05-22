@@ -13,17 +13,64 @@ const PetAdoptionSection = () => {
           <div className="relative group">
             <div className="absolute -inset-2 rounded-[34px] bg-linear-to-r from-pink-500/10 via-purple-500/5 to-cyan-500/10 blur-2xl opacity-70"></div>
 
-            <div className="relative overflow-hidden rounded-[30px] border border-gray-200 dark:border-white/10 bg-white dark:bg-[#090d1a] p-2">
-              <Image
-                src="https://images.unsplash.com/photo-1517849845537-4d257902454a?q=80&w=1200&auto=format&fit=crop"
-                alt="Pet"
-                width={700}
-                height={700}
-                className="w-full h-112 object-cover rounded-[24px] group-hover:scale-102 transition duration-700"
-              />
+            <div className="relative rounded-[30px] border border-gray-200 dark:border-white/10 bg-white dark:bg-[#090d1a] p-2 overflow-hidden">
+              <div className="flex gap-2">
+                {/* Left — 1 large image */}
+                <div
+                  className="relative w-[58%] rounded-[18px] overflow-hidden"
+                  style={{ aspectRatio: "3/4" }}
+                >
+                  <Image
+                    src="https://images.unsplash.com/photo-1517849845537-4d257902454a?q=80&w=800&auto=format&fit=crop"
+                    alt="Pet 1"
+                    fill
+                    className="object-cover group-hover:scale-105 transition duration-700"
+                  />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent" />
+                  {/* Name tag */}
+                  <div className="absolute bottom-3 left-3">
+                    <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-black/30 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold">
+                      🐶 Max
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2 flex-1">
+                  <div className="relative rounded-[18px] overflow-hidden flex-1">
+                    <Image
+                      src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?q=80&w=600&auto=format&fit=crop"
+                      alt="Pet 2"
+                      fill
+                      className="object-cover group-hover:scale-105 transition duration-700 delay-75"
+                    />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent" />
+                    <div className="absolute bottom-2 left-2">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-black/30 backdrop-blur-md border border-white/20 text-white text-[10px] font-bold">
+                        🐕 Buddy
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="relative rounded-[18px] overflow-hidden flex-1">
+                    <Image
+                      src="https://images.unsplash.com/photo-1548802673-380ab8ebc7b7?q=80&w=600&auto=format&fit=crop"
+                      alt="Pet 3"
+                      fill
+                      className="object-cover group-hover:scale-105 transition duration-700 delay-150"
+                    />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent" />
+                    <div className="absolute bottom-2 left-2 right-2">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-pink-500/80 backdrop-blur-md border border-pink-400/30 text-white text-[10px] font-bold">
+                        ❤️ 2,450+ Available
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
+          {/* Right side — unchanged */}
           <div>
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-pink-200 dark:border-pink-500/20 bg-pink-50 dark:bg-pink-500/10 text-pink-600 dark:text-pink-400 text-xs font-semibold backdrop-blur-xl">
               🐾 Featured Companion

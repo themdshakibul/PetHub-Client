@@ -6,20 +6,18 @@ export default function HeroSection({
   title = "Find Your",
   highlight = "Dream Pet",
   description = "Discover loving pets waiting for a caring home.",
-  image = "https://images.unsplash.com/photo-1519052537078-e6302a4968d4?q=80&w=1200&auto=format&fit=crop",
+  image = "https://images.unsplash.com/photo-1505628346881-b72b27e84530?",
   primaryBtn = "Adopt Now",
   secondaryBtn = "List a Pet",
 }) {
   return (
     <section className="relative overflow-hidden bg-gray-100 text-black transition-colors duration-300 dark:bg-[#0B1120] dark:text-white">
-      {/* Blur Effects */}
-      <div className="absolute left-25 top-25 h-72 w-72 rounded-full bg-pink-500/20 blur-3xl"></div>
+      <div className="absolute left-25 top-25 h-72 w-72 rounded-full bg-pink-500/20 blur-3xl animate-pulse duration-[8s]"></div>
 
-      <div className="absolute -bottom-30 -right-30 h-80 w-80 rounded-full bg-cyan-500/20 blur-3xl"></div>
+      <div className="absolute -bottom-30 -right-30 h-80 w-80 rounded-full bg-cyan-500/20 blur-3xl animate-pulse duration-[10s]"></div>
 
-      <div className="container mx-auto grid min-h-screen items-center gap-14 px-2 py-14  md:px-10 lg:grid-cols-2 lg:py-20">
-        {/* Left Side */}
-        <div className="space-y-6 text-center lg:text-left">
+      <div className="container mx-auto grid min-h-screen items-center gap-14 px-2 py-14 md:px-10 lg:grid-cols-2 lg:py-20">
+        <div className="space-y-6 text-center lg:text-left animate-fade-in-right animate-duration-1000">
           <Chip
             variant="flat"
             className="
@@ -44,12 +42,11 @@ export default function HeroSection({
             {description}
           </p>
 
-          {/* Buttons */}
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center lg:justify-start">
             <Button
               radius="full"
               size="lg"
-              className="w-full bg-linear-to-r from-pink-500 to-orange-400 font-semibold text-white shadow-lg sm:w-auto"
+              className="w-full bg-linear-to-r from-pink-500 to-orange-400 font-semibold text-white shadow-lg sm:w-auto transition-transform duration-300 hover:scale-105 active:scale-95"
             >
               {primaryBtn}
             </Button>
@@ -68,25 +65,27 @@ export default function HeroSection({
                 dark:border-white/20
                 dark:bg-white/5
                 dark:text-white
+                transition-transform duration-300 hover:scale-105 active:scale-95
               "
             >
               {secondaryBtn}
             </Button>
           </div>
 
-          {/* Features */}
           <div className="flex flex-wrap items-center justify-center gap-4 pt-2 text-sm text-gray-600 dark:text-gray-300 lg:justify-start">
-            <div className="flex items-center gap-2">🐾 Easy Adoption</div>
-
-            <div className="flex items-center gap-2">✔ Verified Listings</div>
-
-            <div className="flex items-center gap-2">❤️ Safe Platform</div>
+            <div className="flex items-center gap-2 transition-transform hover:scale-105">
+              🐾 Easy Adoption
+            </div>
+            <div className="flex items-center gap-2 transition-transform hover:scale-105">
+              ✔ Verified Listings
+            </div>
+            <div className="flex items-center gap-2 transition-transform hover:scale-105">
+              ❤️ Safe Platform
+            </div>
           </div>
         </div>
 
-        {/* Right Side */}
-        <div className="relative mx-auto mt-10 w-full max-w-md sm:max-w-lg lg:mt-0">
-          {/* Main Card */}
+        <div className="relative mx-auto mt-10 w-full max-w-md sm:max-w-lg lg:mt-0 animate-fade-in-left animate-duration-1000">
           <Card
             className="
               border border-gray-200
@@ -97,6 +96,7 @@ export default function HeroSection({
               dark:border-white/10
               dark:bg-white/5
               sm:p-3
+              transition-transform duration-500 hover:scale-[1.02]
             "
           >
             <div className="overflow-hidden rounded-3xl">
@@ -105,12 +105,11 @@ export default function HeroSection({
                 height={300}
                 src={image}
                 alt="Hero"
-                className="h-87 w-full rounded-3xl object-cover sm:h-112 lg:h-137"
+                className="h-87 w-full rounded-3xl object-cover sm:h-112 lg:h-137 transition-transform duration-700 hover:scale-105"
               />
             </div>
           </Card>
 
-          {/* Floating Card */}
           <Card
             className="
               absolute left-0 top-6 w-44
@@ -118,6 +117,8 @@ export default function HeroSection({
               dark:bg-[#111827]
               dark:text-white
               sm:-left-8 sm:top-10 sm:w-60
+              animate-appearance-in animate-delay-300 animate-duration-700
+              hover:-translate-y-1 transition-transform duration-300
             "
           >
             <div className="flex items-center gap-3 p-3 sm:gap-4 sm:p-4">
@@ -128,10 +129,8 @@ export default function HeroSection({
                 alt="avatar"
                 className="h-10 w-10 rounded-full object-cover sm:h-12 sm:w-12"
               />
-
               <div>
                 <h4 className="text-sm font-semibold sm:text-base">Bella</h4>
-
                 <p className="text-xs text-gray-500 dark:text-gray-400 sm:text-sm">
                   Looking for a new home
                 </p>
@@ -139,11 +138,17 @@ export default function HeroSection({
             </div>
           </Card>
 
-          {/* Bottom Stats Card */}
-          <Card className="absolute -bottom-6 right-0 bg-linear-to-r from-pink-500 to-orange-400 text-white shadow-2xl sm:-right-4">
+          <Card
+            className="
+              absolute -bottom-6 right-0 
+              bg-linear-to-r from-pink-500 to-orange-400 
+              text-white shadow-2xl sm:-right-4
+              animate-appearance-in animate-delay-500 animate-duration-700
+              hover:-translate-y-1 transition-transform duration-300
+            "
+          >
             <div className="px-4 py-3 sm:px-6 sm:py-5">
               <p className="text-xs text-white/80 sm:text-sm">Available Pets</p>
-
               <h2 className="text-2xl font-bold sm:text-3xl">2,450+</h2>
             </div>
           </Card>
