@@ -14,10 +14,38 @@ import {
 import { FiEdit2, FiEye } from "react-icons/fi";
 import DeleteCard from "./DeleteCard";
 import { RequestModal } from "../MyRequist/RequestModal";
+import { getAdoptUserPetId } from "@/lib/Data";
+import { authClient } from "@/lib/auth-client";
 
 const MyListingCard = ({ pets }) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+  const [petRequests, setPetRequests] = useState([]);
+
+  const getPetRequests = async (id) => {
+    try {
+      // setLoading(true);
+
+      const { data: tokenData } = await authClient.token();
+      const token = tokenData?.token;
+
+      const petRequests = await getAdoptUserPetId(id, token);
+      setPetRequests(petRequests);
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/adopt?petId=${id}`,
+        {
+          headers: { authorization: `Bearer ${token}` },
+        },
+      );
+      const data = await res.json();
+    } catch (error) {
+    } finally {
+      // setLoading(false);
+    }
+  };
+
+  console.log(petRequests);
 
   if (!pets) return null;
 
@@ -102,7 +130,7 @@ const MyListingCard = ({ pets }) => {
                 ${adoptionFee}
               </span>
               <span className="text-[10px] text-gray-600 dark:text-slate-400 font-bold">
-                {requests?.length || 0} requests
+                {petRequests?.length || 0} requests
               </span>
             </div>
           </div>
@@ -143,6 +171,7 @@ const MyListingCard = ({ pets }) => {
           <div className="grid grid-cols-2 gap-1.5 w-full">
             <Button
               onPress={() => setIsOpen(true)}
+              onClick={() => getPetRequests(_id)}
               size="sm"
               className="flex-1 w-full bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-gray-800 dark:text-white font-black border border-slate-300 dark:border-white/10 transition-all rounded-lg text-xs h-8 min-h-0 shadow-xs"
               startContent={<FaUserFriends size={12} />}
@@ -154,11 +183,20 @@ const MyListingCard = ({ pets }) => {
           </div>
         </CardFooter>
       </Card>
+      {/* <RequestModal
+        isOpen={isOpen}
+        onOpenChange={(val) => setIsOpen(val)}
+        petName={petName}
+        petRequests={petRequests}
+        setPetRequests={setPetRequests}
+      /> */}
+
       <RequestModal
         isOpen={isOpen}
         onOpenChange={(val) => setIsOpen(val)}
-        requests={pets.requests}
         petName={petName}
+        requests={petRequests}
+        setPetRequests={setPetRequests}
       />
     </>
   );

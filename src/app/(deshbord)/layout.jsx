@@ -13,6 +13,7 @@ import { Menu, X, FileText, PlusCircle, Heart, LogOut } from "lucide-react";
 const DashboardLayout = ({ children }) => {
   const { data } = authClient.useSession();
   const user = data?.user;
+  console.log(user, "user profile");
   const pathname = usePathname();
   const router = useRouter();
 
@@ -136,17 +137,15 @@ const DashboardLayout = ({ children }) => {
                 </p>
               </div>
 
-              <Avatar
-                referrerPolicy="no-referrer"
-                size="md"
-                radius="full"
-                src={user?.image || undefined}
-              >
-                {!user?.image && (
-                  <span className="font-semibold">
-                    {user?.name?.charAt(0) || "U"}
-                  </span>
-                )}
+              <Avatar>
+                <Avatar.Image alt="John Doe" src={user?.image} />
+                <Avatar.Fallback>
+                  {!user?.image && (
+                    <span className="font-semibold">
+                      {user?.name?.charAt(0) || "U"}
+                    </span>
+                  )}
+                </Avatar.Fallback>
               </Avatar>
             </div>
           </div>

@@ -3,8 +3,7 @@
 PawFind is a comprehensive Pet Adoption Platform built using the MERN stack. This application connects pet lovers with pets in need of a home. It provides a seamless interface for users to browse, search, and request adoption, while pet owners can efficiently manage their listings and adoption requests.
 
 ## 🚀 Live URL
-
-[Insert your Vercel/Render Live Link Here]
+https://pet-hub-client.vercel.app
 
 ## 🎯 Purpose
 
@@ -27,7 +26,7 @@ The goal of this platform is to simplify the pet adoption process by providing a
 - **React Router**
 - **Axios** (for API requests)
 - **TanStack Query** (for data fetching)
-- **Firebase** (for Authentication)
+- **BeterOth** (for Authentication)
 
 ### Backend
 
@@ -39,19 +38,15 @@ The goal of this platform is to simplify the pet adoption process by providing a
 
 ## 📦 NPM Packages Used
 
-- `react`, `react-router-dom`
+- `react` & `react-router-dom`
 - `axios`
-- `tanstack/react-query`
+- `@tanstack/react-query`
 - `firebase`
 - `react-hook-form`
 - `react-toastify` (for notifications)
 - `framer-motion` (for animations)
 - `jsonwebtoken`
-- `cors`, `dotenv`, `mongoose`
+- `cors` & `dotenv`
+- `mongoose`
 
 ## ⚙️ How to Run Locally
-
-1. Clone the repository:
-   ```bash
-   git clone [your-repo-url]
-   ```

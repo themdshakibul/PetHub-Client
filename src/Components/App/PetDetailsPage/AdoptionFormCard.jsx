@@ -15,7 +15,7 @@ import {
 } from "react-icons/fa";
 
 export const AdoptionFormCard = ({ petInfo }) => {
-  const [date, setDate] = useState(null); 
+  const [date, setDate] = useState(null);
   const [isAdopted, setIsAdopted] = useState(false);
 
   const { data } = authClient.useSession();
@@ -67,8 +67,6 @@ export const AdoptionFormCard = ({ petInfo }) => {
       pickupDate: new Date(date),
       requestDate: new Date().toISOString(),
     };
-
-    console.log("Submitting Field Data:", fieldData);
 
     const { data: tokenData } = await authClient.token();
     const adopt = await adoptUserPet(fieldData, tokenData);

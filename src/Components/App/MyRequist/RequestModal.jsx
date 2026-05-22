@@ -1,30 +1,47 @@
 "use client";
 
+import { authClient } from "@/lib/auth-client";
+import { getAdoptUserPetId } from "@/lib/Data";
 import { AlertDialog, Button, Chip, ScrollShadow } from "@heroui/react";
-import { FaHeart, FaUserFriends } from "react-icons/fa";
+import toast from "react-hot-toast";
+import { FaHeart, FaTimes, FaUserFriends } from "react-icons/fa";
 
-export function RequestModal({ isOpen, onOpenChange, requests, petName }) {
-  console.log("Received requests:", requests);
-
-  const handleStatusUpdate = async (id, newStatus) => {
+export function RequestModal({
+  isOpen,
+  onOpenChange,
+  requests,
+  petName,
+  setPetRequests,
+}) {
+  const handleStatus = async (id, status, petId) => {
     try {
-      const response = await fetch(`http://localhost:5000/requests/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ status: newStatus }),
-      });
+      const { data: tokenData } = await authClient.token();
+      const token = tokenData?.token;
 
-      if (response.ok) {
-        alert(`Request ${newStatus}ed successfully!`);
-        onOpenChange(false);
-        window.location.reload();
-      } else {
-        alert("Something went wrong!");
+      // update
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/adopt/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "content-type": "application/json",
+            authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ status }),
+        },
+      );
+
+      if (!res.ok) {
+        throw new Error("Failed");
       }
+
+      // updated requests
+      const updatedRequests = await getAdoptUserPetId(petId, token);
+      setPetRequests(updatedRequests);
+
+      toast.success(`Request ${status}`);
     } catch (error) {
-      console.error("Error updating status:", error);
+      toast.error("Something went wrong");
     }
   };
 
@@ -33,11 +50,23 @@ export function RequestModal({ isOpen, onOpenChange, requests, petName }) {
       <AlertDialog.Backdrop variant="blur">
         <AlertDialog.Container>
           <AlertDialog.Dialog className="sm:max-w-md">
-            <AlertDialog.Header className="flex flex-row items-center gap-2">
-              <FaUserFriends className="text-xl" />
-              <AlertDialog.Heading>
-                Adoption Requests for {petName}
-              </AlertDialog.Heading>
+            <AlertDialog.Header className="relative flex items-center gap-2 pr-10">
+              <div className="flex items-center gap-2">
+                <FaUserFriends className="text-xl" />
+
+                <AlertDialog.Heading>
+                  Adoption Requests for {petName}
+                </AlertDialog.Heading>
+              </div>
+              <Button
+                isIconOnly
+                size="sm"
+                variant="light"
+                className="absolute top-2 right-2 min-w-0 w-7 h-7 rounded-full text-slate-400 hover:text-white"
+                onPress={() => onOpenChange(false)}
+              >
+                <FaTimes size={11} />
+              </Button>
             </AlertDialog.Header>
 
             <AlertDialog.Body className="py-6">
@@ -51,76 +80,159 @@ export function RequestModal({ isOpen, onOpenChange, requests, petName }) {
               ) : (
                 <ScrollShadow className="max-h-[60vh]">
                   <div className="flex flex-col gap-3">
-                    {requests.map((req) => (
-                      <div
-                        key={req._id}
-                        className="p-4 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-black/20"
-                      >
-                        <div className="flex justify-between items-center mb-2">
-                          <div>
-                            <p className="font-bold text-sm">{req.userName}</p>
-                            <p className="text-[10px] text-slate-500">
-                              {req.userEmail}
-                            </p>
-                          </div>
-                          <Chip
-                            size="sm"
-                            color={
-                              req.status === "pending"
-                                ? "warning"
-                                : req.status === "approved"
-                                  ? "success"
-                                  : "danger"
-                            }
+                    {requests.map(
+                      (req) => (
+                        console.log(JSON.stringify(req, null, 2), "requist"),
+                        (
+                          <div
+                            key={req._id}
+                            className="p-4 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-black/20 overflow-hidden"
                           >
-                            {req.status}
-                          </Chip>
-                        </div>
+                            <div className="flex justify-between items-start gap-3 mb-3">
+                              <div className="min-w-0 flex-1">
+                                <p className="font-bold text-sm wrap-break-word text-white">
+                                  {req.usrName}
+                                </p>
 
-                        {req.pickupDate && (
-                          <p className="text-xs text-slate-400 mb-2">
-                            Pickup:{" "}
-                            {new Date(req.pickupDate).toLocaleDateString()}
-                          </p>
-                        )}
+                                <p className="text-[11px] text-slate-400 break-all">
+                                  {req.email}
+                                </p>
+                              </div>
 
-                        {/* স্ট্যাটাস যদি pending থাকে শুধু তখনই বাটনগুলো দেখাবে */}
-                        {req.status === "pending" && (
-                          <div className="flex gap-2 mt-3">
-                            <Button
-                              size="sm"
-                              color="success"
-                              className="flex-1 text-white"
-                              onPress={() =>
-                                handleStatusUpdate(req._id, "approved")
-                              }
-                            >
-                              Approve
-                            </Button>
-                            <Button
-                              size="sm"
-                              color="danger"
-                              className="flex-1 text-white"
-                              onPress={() =>
-                                handleStatusUpdate(req._id, "rejected")
-                              }
-                            >
-                              Reject
-                            </Button>
+                              <Chip
+                                size="sm"
+                                color={
+                                  req.status === "pending"
+                                    ? "warning"
+                                    : req.status === "approved"
+                                      ? "success"
+                                      : "danger"
+                                }
+                                className="capitalize"
+                              >
+                                {req.status}
+                              </Chip>
+                            </div>
+
+                            {req.pickupDate && (
+                              <div className="mb-2">
+                                <p className="text-[11px] text-slate-500">
+                                  Pickup Date:
+                                </p>
+
+                                <p className="text-xs text-slate-300">
+                                  {new Date(req.pickupDate).toLocaleDateString(
+                                    "en-US",
+                                    {
+                                      year: "numeric",
+                                      month: "long",
+                                      day: "numeric",
+                                    },
+                                  )}
+                                </p>
+                              </div>
+                            )}
+
+                            {req.requestDate && (
+                              <div className="mb-2">
+                                <p className="text-[11px] text-slate-500">
+                                  Request Date:
+                                </p>
+
+                                <p className="text-xs text-slate-300">
+                                  {new Date(req.requestDate).toLocaleDateString(
+                                    "en-US",
+                                    {
+                                      year: "numeric",
+                                      month: "long",
+                                      day: "numeric",
+                                    },
+                                  )}
+                                </p>
+                              </div>
+                            )}
+
+                            {req.text && (
+                              <div className="mb-3">
+                                <p className="text-[11px] text-slate-500 mb-1">
+                                  Message:
+                                </p>
+
+                                <div className="text-xs text-slate-300 bg-white/5 rounded-lg p-3 wrap-break-word whitespace-pre-wrap leading-relaxed">
+                                  {req.text}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* {req.status === "pending" && (
+                              <div className="grid grid-cols-2 gap-3 mt-4">
+                                <Button
+                                  size="sm"
+                                  radius="full"
+                                  color="success"
+                                  className="w-full font-semibold text-white"
+                                  startContent={<span>✓</span>}
+                                  onClick={() =>
+                                    handleStatus(req._id, "approved", req.petId)
+                                  }
+                                >
+                                  Approve
+                                </Button>
+
+                                <Button
+                                  size="sm"
+                                  radius="full"
+                                  color="danger"
+                                  className="w-full font-semibold text-white"
+                                  startContent={<span>✕</span>}
+                                  onClick={() =>
+                                    handleStatus(req._id, "rejected", req.petId)
+                                  }
+                                >
+                                  Reject
+                                </Button>
+                              </div>
+                            )} */}
+
+                            {(req.status === "pending" ||
+                              req.status === "available" ||
+                              req.status === "Available") && (
+                              <div className="grid grid-cols-2 gap-3 mt-4">
+                                <Button
+                                  size="sm"
+                                  radius="full"
+                                  color="success"
+                                  className="w-full font-semibold text-white bg-success"
+                                  startContent={<span>✓</span>}
+                                  onClick={() =>
+                                    handleStatus(req._id, "approved", req.petId)
+                                  }
+                                >
+                                  Approve
+                                </Button>
+
+                                <Button
+                                  size="sm"
+                                  radius="full"
+                                  color="danger"
+                                  className="w-full font-semibold text-white bg-red-500"
+                                  startContent={<span>✕</span>}
+                                  onClick={() =>
+                                    handleStatus(req._id, "rejected", req.petId)
+                                  }
+                                >
+                                  Reject
+                                </Button>
+                              </div>
+                            )}
                           </div>
-                        )}
-                      </div>
-                    ))}
+                        )
+                      ),
+                    )}
                   </div>
                 </ScrollShadow>
               )}
             </AlertDialog.Body>
-
-            <AlertDialog.Footer>
-              <Button slot="close" className="w-full">
-                Close
-              </Button>
-            </AlertDialog.Footer>
           </AlertDialog.Dialog>
         </AlertDialog.Container>
       </AlertDialog.Backdrop>

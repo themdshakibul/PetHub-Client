@@ -34,13 +34,38 @@ export const createPate = async (petData, tokenData) => {
 };
 
 // AdoptFormCard
-export const getAdoptUserPet = async (user, token) => {
+export const getAdoptUserPet = async (email, token) => {
+  if (!email) return [];
+
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/adopt/${user?.id}`,
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/adopt?userEmail=${encodeURIComponent(email)}`,
     {
-      authorization: `Bearer ${token}`,
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+      cache: "no-store",
     },
   );
+
+  if (!res.ok) {
+    throw new Error("Failed to load requests");
+  }
+
+  return res.json();
+};
+
+export const getAdoptUserPetId = async (petId, token) => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/adopt?petId=${encodeURIComponent(petId)}`,
+    {
+      headers: { authorization: `Bearer ${token}` },
+    },
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to load requests");
+  }
+
   const data = await res.json();
   return data;
 };
