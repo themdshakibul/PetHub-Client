@@ -155,7 +155,7 @@ export default function PetFilterForm({ handleSearch }) {
             type="button"
             className="w-full h-14 rounded-2xl bg-linear-to-r from-pink-500 via-violet-500 to-cyan-500 text-white font-medium text-sm hover:scale-[1.02] transition-all duration-300 shadow-[0_10px_30px_rgba(168,85,247,0.25)] cursor-pointer"
           >
-            Searching...
+            Search
           </button>
         </div>
       </div>

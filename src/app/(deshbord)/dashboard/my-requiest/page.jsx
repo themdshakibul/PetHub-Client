@@ -60,9 +60,9 @@ const MyRequistPage = async () => {
             </p>
 
             <Link href="/all-pate" className="w-full sm:w-auto">
-              <Button className="w-full sm:w-auto bg-linear-to-r from-[#ec4899] via-[#a855f7] to-[#06b6d4] text-white font-semibold px-8 py-2.5 rounded-full shadow-lg hover:opacity-90 transition-opacity">
+              <div className="w-full sm:w-auto bg-linear-to-r from-[#ec4899] via-[#a855f7] to-[#06b6d4] text-white font-semibold px-8 py-2.5 rounded-full shadow-lg hover:opacity-90 transition-opacity">
                 + Find a Pet to Adopt
-              </Button>
+              </div>
             </Link>
           </div>
         ) : (

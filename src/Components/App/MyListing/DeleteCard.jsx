@@ -3,10 +3,13 @@
 import { authClient } from "@/lib/auth-client";
 import { TriangleExclamation } from "@gravity-ui/icons";
 import { AlertDialog, Button } from "@heroui/react";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { FaTrash } from "react-icons/fa";
 
 const DeleteCard = ({ petId, status }) => {
+  const router = useRouter();
+
   const handleDelete = async () => {
     const { data: tokenData } = await authClient.token();
     const res = await fetch(
@@ -22,7 +25,7 @@ const DeleteCard = ({ petId, status }) => {
 
     if (res.ok) {
       toast.success("Successfully deleted!");
-      window.location.reload();
+      router.refresh();
     }
   };
 

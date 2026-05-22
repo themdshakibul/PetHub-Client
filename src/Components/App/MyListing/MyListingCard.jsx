@@ -45,8 +45,6 @@ const MyListingCard = ({ pets }) => {
     }
   };
 
-  console.log(petRequests);
-
   if (!pets) return null;
 
   const {
