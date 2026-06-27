@@ -1,4 +1,4 @@
-# 🐾 PatHub: A Full-Stack Pet Hub Platform
+# 🐾 PatHub: A Full-Stack Pet Hub Platform 
 
 petHub is a comprehensive PetHub Platform built using the MERN stack. This application connects pet lovers with pets in need of a home. It provides a seamless interface for users to browse, search, and request adoption, while pet owners can efficiently manage their listings and adoption requests.
 
@@ -6,7 +6,7 @@ petHub is a comprehensive PetHub Platform built using the MERN stack. This appli
 
 👉 [PatHub Live Link](https://pet-hub-client.vercel.app)
 
-## 🎯 Purpose
+## 🎯 Purpose 
 
 The goal of this platform is to simplify the pet adoption process by providing a secure, user-friendly, and centralized space for pet owners and adopters to interact, ensuring every pet finds a loving home.
 
